@@ -30,7 +30,7 @@ const InputNumber = forwardRef<Partial<TextInput>, InputNumberProps>(
     },
     forwardedRef
   ) => {
-    const [internalText, setInternalText] = useState(String(value ?? "0"));
+    const [internalText, setInternalText] = useState(String(value ?? ""));
 
     useEffect(() => {
       setInternalText(String(value ?? ""));
