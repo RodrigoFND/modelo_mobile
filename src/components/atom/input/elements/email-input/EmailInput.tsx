@@ -3,10 +3,11 @@ import { TextInput, TextInputProps } from 'react-native';
 import { useInputRef } from '../useInputRef';
 import useInputStyle from '../Input.style';
 
-type InputTextProps = Omit<TextInputProps, 'required' | 'editable'>
+type InputEmailProps = Omit<TextInputProps, 'required' | 'editable' | 'keyboardType' | 'textContentType'> & {
+}
 
-const InputText = forwardRef<Partial<TextInput>, InputTextProps>(
-    ({ onChangeText, numberOfLines = 1, style, onFocus, onBlur, value = '', ...props }, forwardedRef) => {
+const InputEmail = forwardRef<Partial<TextInput>, InputEmailProps>(
+    ({ onChangeText, numberOfLines = 1, style, onFocus, onBlur, value = '', placeholder = 'Email', ...props }, forwardedRef) => {
     const {handlers, ref, editable, status, variant} =  useInputRef(forwardedRef, onFocus, onBlur, onChangeText, value);
     const styles = useInputStyle({variant,status});
 
@@ -20,9 +21,13 @@ const InputText = forwardRef<Partial<TextInput>, InputTextProps>(
             numberOfLines={numberOfLines}
             onBlur={handlers.handleBlur}
             onChangeText={handlers.handleChangeText}
+            keyboardType="email-address"
+            textContentType="emailAddress"
+            importantForAutofill='yes'
+            placeholder={placeholder}
             {...props}
           
         />
     );
 });
-export default InputText;
+export default InputEmail;

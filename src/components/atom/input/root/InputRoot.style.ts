@@ -52,10 +52,6 @@ interface InputRootStylesProps {
 
 export const useInputRootStyles = (styles: InputRootStylesProps) => {
     const {theme} = useTheme();
-    console.log(styles.focusedState)
-    console.log(styles.filledState)
-    console.log(styles.status)
-    console.log(borderColorMap[styles.filledState][styles.status][styles.focusedState](theme))
 
     return StyleSheet.create({
         inputContainer: {

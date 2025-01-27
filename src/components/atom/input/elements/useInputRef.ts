@@ -3,7 +3,6 @@ import {
   useRef,
   useImperativeHandle,
   useEffect,
-  useMemo,
 } from "react";
 import { TextInput } from "react-native";
 import { useInputContext } from "../InputContext";
@@ -12,7 +11,7 @@ export function useInputRef<T extends Partial<TextInput>>(
   forwardedRef: ForwardedRef<T>,
   onFocus?: (e: any) => void,
   onBlur?: (e: any) => void,
-  onChangeText?: (text: string) => void,
+  onChangeText?: (text: any) => void,
   value?: any
 ) {
   const { onFilled, onFocused, onInputClick, editable, status, variant } =
@@ -41,7 +40,7 @@ export function useInputRef<T extends Partial<TextInput>>(
   );
 
   useEffect(() => {
-    onFilled.emit(value ? "filled" : "notFilled");
+    handlers.handleChangeText(value)
   }, [value]);
 
   useEffect(() => {
@@ -57,9 +56,9 @@ export function useInputRef<T extends Partial<TextInput>>(
       onFocused?.emit("notFocused");
       if (dispatchToParent) onBlur?.(e);
     },
-    handleChangeText: (text: string) => {
+    handleChangeText: (text: any) => {
       onChangeText?.(text);
-      onFilled?.emit(text ? "filled" : "notFilled");
+      onFilled?.emit(text || '0' ? "filled" : "notFilled");
     },
   };
 

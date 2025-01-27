@@ -15,10 +15,7 @@ import {
 import Button from "@/src/components/atom/button/Button";
 import { useRef } from "react";
 import Text from "@/src/components/atom/text/Text";
-import Label from "../components/atom/label/Label";
 import { Input } from "../components/atom/input/Input";
-import TesteInput from "../components/atom/input/elements/number-input/Teste";
-import { InputNumber2 } from "../components/atom/input/elements/number-input/Teste2";
 
 type formFields = {
   email: string;
@@ -33,9 +30,6 @@ const schema = z.object({
     .min(10, { message: "Password must be at least 8 characters" }),
   myNumber: z
     .number()
-    .min(3, { message: "Number must be at least 3" })
-    // Transforma qualquer valor > 4 em 4
-    .transform((val) => 3),
 });
 
 export default function SignIn() {
@@ -48,13 +42,13 @@ export default function SignIn() {
     resolver: zodResolver(schema),
     defaultValues: {
       email: "test@test.com",
-      password: "test1234",
+      password: "test1234156156",
       myNumber: 2345,
     },
   });
   const refEmail = useRef<TextInput>(null);
   const refPassword = useRef<TextInput>(null);
-  const refInputText = useRef<TextInput>(null);
+  const refNumber = useRef<TextInput>(null);
 
   const onSubmit = (data: formFields) => {
     console.log(data);
@@ -146,6 +140,47 @@ export default function SignIn() {
               </Input.Root>
             )}
           />
+
+<Controller
+            control={control}
+            name="myNumber"
+            render={({ field: { onChange, onBlur, value, disabled } }) => (
+              <Input.Root
+                error={errors.myNumber ? true : false}
+                errorMessage={errors.myNumber?.message}
+                variant="md"
+                fullWidth={false}
+                label="NUmber"
+                required={true}
+                editable={disabled}
+              >
+                <Input.Icon name="star" family="Feather" />
+                <Input.Number
+                  ref={refNumber}
+                  allowDecimals={true}
+                  maxDecimalPlaces={2}
+                  maxLength={10}
+                  onChangeNumber={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  placeholder="Number"
+                  secureTextEntry={false}
+                  autoComplete="password"
+                  testID="password-input"
+                  autoFocus={false}
+                  returnKeyType="done"
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log("Icon clicked");
+                  }}
+                >
+                  <Input.Icon name="star" family="Feather" />
+                </TouchableOpacity>
+              </Input.Root>
+            )}
+          />
+          
           
 
           <Button.Root
