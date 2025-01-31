@@ -17,6 +17,7 @@ const InputEmail = forwardRef<Partial<TextInput>, InputEmailProps>(
             editable={editable}
             value={value}
             style={[styles.input, style]}
+            placeholderTextColor={styles.placeholder.color}
             onFocus={handlers.handleFocus}
             numberOfLines={numberOfLines}
             onBlur={handlers.handleBlur}
@@ -24,6 +25,7 @@ const InputEmail = forwardRef<Partial<TextInput>, InputEmailProps>(
             keyboardType="email-address"
             textContentType="emailAddress"
             importantForAutofill='yes'
+            autoComplete='email'
             placeholder={placeholder}
             {...props}
           

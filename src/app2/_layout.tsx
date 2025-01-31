@@ -16,24 +16,15 @@ import {
 } from "@tanstack/react-query";
 import { Entypo } from "@expo/vector-icons";
 import * as Font from "expo-font";
-import { AuthProvider } from "@/src/providers/authTest/AuthProviderTest";
+import { AuthProvider } from "@/src/providers/auth/AuthProvider";
 import { ClerkProvider } from "@clerk/clerk-expo";
 import { tokenCache } from "@/src/utils/secureStore/oAuthStore/oAuthStore";
 import { Theme } from "@/src/styles/theme.style";
 import { ThemeProvider } from "@/src/providers/ThemeProvider";
-import {
-  Mulish_400Regular,
-  Mulish_500Medium,
-  Mulish_600SemiBold,
-  Mulish_700Bold,
-} from "@expo-google-fonts/mulish";
-import {
-  DMSans_400Regular,
-  DMSans_500Medium,
-  DMSans_700Bold,
-} from "@expo-google-fonts/dm-sans";
+import {Mulish_400Regular,Mulish_500Medium,Mulish_600SemiBold,Mulish_700Bold} from "@expo-google-fonts/mulish";
+import { DMSans_400Regular, DMSans_500Medium, DMSans_700Bold } from '@expo-google-fonts/dm-sans';
 import AmbientVariables from "@/src/env";
-import * as WebBrowser from "expo-web-browser";
+import * as WebBrowser from 'expo-web-browser';
 
 onlineManager.setEventListener((setOnline) => {
   const subscription = Network.addNetworkStateListener((state) => {
@@ -85,7 +76,7 @@ export default function RootLayout() {
             DMSans_500Medium,
             DMSans_700Bold,
           }),
-          Font.loadAsync(Entypo.font),
+          Font.loadAsync(Entypo.font)
         ]);
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
@@ -104,10 +95,10 @@ export default function RootLayout() {
   useEffect(() => {
     // Inicializa a sessão de autenticação
     WebBrowser.maybeCompleteAuthSession();
-
+    
     // Warm up do WebBrowser
     WebBrowser.warmUpAsync();
-
+    
     return () => {
       WebBrowser.coolDownAsync();
     };
@@ -118,6 +109,8 @@ export default function RootLayout() {
     const subscription = AppState.addEventListener("change", onAppStateChange);
     return () => subscription.remove();
   }, []);
+
+
 
   const onLayoutRootView = useCallback(() => {
     if (appIsReady) {
@@ -141,13 +134,42 @@ export default function RootLayout() {
   );
 }
 
+/* function RootLayoutNav() {
+  const colorScheme = useColorScheme();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+            <Stack.Screen name="(public)" options={{ headerShown: false }} />
+          </Stack>
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+} */
+
+/* const PUBLIC_CLERK_PUBLISHABLE_KEY =
+  process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY || ""; */
+
 function RootLayoutNav() {
   /* console.log(PUBLIC_CLERK_PUBLISHABLE_KEY); */
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <Slot />
-      </AuthProvider>
+    {/*   <ClerkProvider
+        publishableKey={PUBLIC_CLERK_PUBLISHABLE_KEY}
+        tokenCache={tokenCache}
+      > */}
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)/index" options={{ headerShown: false }} />
+        </Stack>
+      {/* </ClerkProvider> */}
     </ThemeProvider>
   );
 }

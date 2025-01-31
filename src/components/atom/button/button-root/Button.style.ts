@@ -20,6 +20,7 @@ const buttonSizes: { [key in ButtonVariants]: { width: number; height: number; p
   lg: { width: scaleSize(64), height: scaleSize(64), paddingHorizontal: scaleSize(20), paddingVertical: scaleSize(20) },
 };
 
+
 const buttonAlignments: { [key in ButtonAlignments]: "flex-start" | "center" | "flex-end" } = {
   "flex-start": "flex-start",
   center: "center",
@@ -77,6 +78,34 @@ const borderColorMap: {
   },
 };
 
+const spinnerSizes: { [key in ButtonVariants]: number } = {
+  sm: 24,
+  md: 28,
+  lg: 32,
+};
+
+const spinnerColors: { [key in ButtonType]: { [key in ButtonActions]: (theme: BaseTheme) => string } } = {
+  default: {
+    default: (theme: BaseTheme) => theme.mapped.text.on.default,
+    defaultInverted: (theme: BaseTheme) => theme.mapped.text.on.defaultInverted,
+    primary: (theme: BaseTheme) => theme.mapped.text.on.primary,
+    secondary: (theme: BaseTheme) => theme.mapped.text.on.secondary,
+    warning: (theme: BaseTheme) => theme.mapped.text.on.warning,
+    danger: (theme: BaseTheme) => theme.mapped.text.on.danger,
+  },
+  outline: {
+    default: (theme: BaseTheme) => theme.mapped.text.default,
+    defaultInverted: (theme: BaseTheme) => theme.mapped.text.defaultInverted,
+    primary: (theme: BaseTheme) => theme.mapped.text.primary,
+    secondary: (theme: BaseTheme) => theme.mapped.text.secondary,
+    warning: (theme: BaseTheme) => theme.mapped.text.warning,
+    danger: (theme: BaseTheme) => theme.mapped.text.danger,
+  },
+};
+
+
+
+
 export const useButtonStyles = (buttonStyles: ButtonStyles) => {
   const { theme } = useTheme();
 
@@ -96,6 +125,10 @@ export const useButtonStyles = (buttonStyles: ButtonStyles) => {
       borderRadius: buttonBorderShapes[buttonStyles.shape],
       borderWidth: buttonStyles.type === 'outline' ? 1 : 0,
       borderColor: borderColorMap[buttonStyles.type][buttonStyles.action](theme),
+    },
+    spinner: {
+      fontSize: spinnerSizes[buttonStyles.variant],
+      color: spinnerColors[buttonStyles.type][buttonStyles.action](theme),
     },
   });
 };

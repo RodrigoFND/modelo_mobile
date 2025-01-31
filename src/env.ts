@@ -4,10 +4,20 @@ import { Env } from '../types/env';
 
 const envSchema = z.object({
   apiUrl: z.string().url(),
+  clerkPublishableKey: z.string(),
+  appwriteCollectionUsersId: z.string(),
+  appwriteDatabaseId: z.string(),
+  appwriteProjectId: z.string(),
+  appwriteEndpoint: z.string().url(),
 });
 
 const AmbientVariables: Env = {
-    apiUrl: Constants.expoConfig?.extra?.apiUrl
+    apiUrl: process.env.EXPO_PUBLIC_API_URL || "",
+    clerkPublishableKey: Constants.expoConfig?.extra?.CLERK_PUBLISHABLE_KEY,
+    appwriteCollectionUsersId: Constants.expoConfig?.extra?.APPWRITE_COLLECTION_USERS_ID,
+    appwriteDatabaseId: Constants.expoConfig?.extra?.APPWRITE_DATABASE_ID,
+    appwriteProjectId: Constants.expoConfig?.extra?.APPWRITE_PROJECT_ID,
+    appwriteEndpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT || "",
 };
 
 const result = envSchema.safeParse(AmbientVariables);

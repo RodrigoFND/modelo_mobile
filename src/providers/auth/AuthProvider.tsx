@@ -5,7 +5,7 @@ import React, {
   useContext,
   ReactNode,
 } from "react";
-import { AuthService } from "@/src/services/auth";
+import { AuthService } from "@/src/services/axios/service";
 import {
   getSessionTokens,
   saveSessionTokens,
@@ -124,8 +124,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   async function signInWithToken(): Promise<void> {
     try {
+
+      const username = "teste"
+      const userId = 3232
+
       
-      const { username, id: userId } = await AuthService.getAuthUser();
+    
     
       const tokens = await getSessionTokens();
       

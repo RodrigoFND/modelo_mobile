@@ -4,11 +4,19 @@ import * as Icons from '@expo/vector-icons';
 
 type IconFamily = 'Feather' | 'Material' | 'AntDesign' | 'FontAwesome' | 'Ionicons';
 
-type IconName = keyof (typeof Icons.Feather['glyphMap'] | 
-  typeof Icons.MaterialIcons['glyphMap'] | 
-  typeof Icons.AntDesign['glyphMap'] | 
-  typeof Icons.FontAwesome['glyphMap'] | 
-  typeof Icons.Ionicons['glyphMap']);
+type FeatherIcons = keyof typeof Icons.Feather['glyphMap'];
+type MaterialIcons = keyof typeof Icons.MaterialIcons['glyphMap'];
+type AntDesignIcons = keyof typeof Icons.AntDesign['glyphMap'];
+type FontAwesomeIcons = keyof typeof Icons.FontAwesome['glyphMap'];
+type IoniconsIcons = keyof typeof Icons.Ionicons['glyphMap'];
+
+type IconName = 
+  | FeatherIcons
+  | MaterialIcons
+  | AntDesignIcons
+  | FontAwesomeIcons
+  | IoniconsIcons;
+  
 
 export interface IconProps {
   name: IconName;
@@ -34,7 +42,7 @@ const Icon = memo(({
   style
 }: IconProps) => {
   const IconComponent = iconMap[family];
-  return <IconComponent name={name} size={size} color={color} style={style} />;
+  return <IconComponent name={name as any} size={size} color={color} style={style} />;
 });
 
 Icon.displayName = 'Icon';

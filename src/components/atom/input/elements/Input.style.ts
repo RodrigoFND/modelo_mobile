@@ -48,6 +48,9 @@ const useInputStyle = (styles: InputStylesProps) => {
       textAlignVertical: 'center', // Centraliza verticalmente
 
     },
+    placeholder: {
+      color: theme.mapped.text.disabled,
+    },
   });
 };
 

@@ -324,8 +324,8 @@ export const Theme: BaseTheme = {
       errorFocused: colors.red_600,
       disabled: colors.grey_200,
       filled: {
-        default: colors.aqua_600,
-        defaultFocused: colors.aqua_700,
+        default: colors.grey_400,
+        defaultFocused: colors.grey_700,
         error: colors.red_600,
         errorFocused: colors.red_800,
         disabled: colors.grey_200,

@@ -119,6 +119,7 @@ const InputNumber = forwardRef<Partial<TextInput>, InputNumberProps>(
         editable={editable}
         value={internalText} // Exibimos a string do nosso estado interno
         style={[styles.input, style]}
+        placeholderTextColor={styles.placeholder.color}
         onFocus={handlers.handleFocus}
         onBlur={handleBlur}
         numberOfLines={numberOfLines}

@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleProp, ViewStyle, ActivityIndicator } from "react-native";
+import { CircleSnail } from 'react-native-progress';
 import { TouchableOpacity } from "react-native";
 import { useButtonStyles } from "./Button.style";
 import { ButtonContextProps, ButtonProvider } from "../ButtonContext";
@@ -45,18 +46,20 @@ const ButtonRoot: React.FC<ButtonRootProps> = ({
       action={action}
       shape={shape}
       alignHorizontal={alignHorizontal}
-      disabled={disabled}
+      disabled={disabled || loading }
     >
       <TouchableOpacity
-        disabled={disabled}
+        disabled={disabled || loading}
         onPress={onPress}
         style={[styles.button, style]}
         {...props}
       >
         {loading ? (
-          <ActivityIndicator
-            size={variant === "lg" ? "large" : "small"}
-            color={"white"}
+          <CircleSnail
+          style={{position: "absolute"}}
+          
+            size={styles.spinner.fontSize}
+            color={styles.spinner.color}
           />
         ) : (
           children

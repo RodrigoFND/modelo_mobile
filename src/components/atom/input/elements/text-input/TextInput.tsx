@@ -16,6 +16,7 @@ const InputText = forwardRef<Partial<TextInput>, InputTextProps>(
             editable={editable}
             value={value}
             style={[styles.input, style]}
+            placeholderTextColor={styles.placeholder.color}
             onFocus={handlers.handleFocus}
             numberOfLines={numberOfLines}
             onBlur={handlers.handleBlur}
