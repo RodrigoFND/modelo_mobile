@@ -14,7 +14,8 @@
       "@models/*": ["./src/models/*"],
       "@store/*": ["./src/store/*"],
       "@services/*": ["./src/services/*"],
-      "@backend/*": ["./backend/*"]
+      "@backend/*": ["./src/backend/*"],
+      "@routes/*": ["./src/routes/*"]
     }
   },
   "include": [

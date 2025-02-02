@@ -1,4 +1,4 @@
-//https://www.youtube.com/watch?v=5GG-VUvruzE
+/* //https://www.youtube.com/watch?v=5GG-VUvruzE
 
 import { View ,Text} from "react-native"
 
@@ -89,7 +89,7 @@ type Comment = {
     },
   } as const satisfies RolesWithPermissions
   
-  export function hasPermission<Resource extends keyof Permissions>(
+  export function hasRoutePermission<Resource extends keyof Permissions>(
     user: User,
     resource: Resource,
     action: Permissions[Resource]["action"],
@@ -114,9 +114,10 @@ type Comment = {
       userId: "1",
     }
     return <View>
-        {hasPermission(user, "comments", "create") ? <Text style={{color: "green"}}>Can create comment</Text> : <Text style={{color: "red"}}>Cannot create comment</Text>}
-        {hasPermission(user, "todos", "view", todo) ? <Text style={{color: "green"}}>Can view todo</Text> : <Text style={{color: "red"}}>Cannot view todo</Text>}
-        {hasPermission(user, "todos", "view") ? <Text style={{color: "green"}}>Can view all todos</Text> : <Text style={{color: "red"}}>Cannot view all todos</Text>}
+        {hasRoutePermission(user, "comments", "create") ? <Text style={{color: "green"}}>Can create comment</Text> : <Text style={{color: "red"}}>Cannot create comment</Text>}
+        {hasRoutePermission(user, "todos", "view", todo) ? <Text style={{color: "green"}}>Can view todo</Text> : <Text style={{color: "red"}}>Cannot view todo</Text>}
+        {hasRoutePermission(user, "todos", "view") ? <Text style={{color: "green"}}>Can view all todos</Text> : <Text style={{color: "red"}}>Cannot view all todos</Text>}
     </View>
   }
   
+ */

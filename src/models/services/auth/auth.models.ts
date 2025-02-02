@@ -1,11 +1,13 @@
 // 🔹 Definição dos tipos de recursos e suas ações permitidas
 export type Roles = 'admin' | 'basic'
+type Actions = 'view' | 'create' | 'update' | 'delete'
 
 export type PermissionActions = {
-  comments: "view" | "create" | "update";
-  todos: "view" | "create" | "update" | "delete";
-  projects: "view" | "create" | "update" | "delete"; // 🔹 Exemplo de outro recurso
+  comments: Actions;
+  todos: Actions;
+  projects: Actions; // 🔹 Exemplo de outro recurso
 };
+
 
 // 🔹 Lista válida de permissões no formato "resource:action"
 export type PermissionsList = `${keyof PermissionActions}:${PermissionActions[keyof PermissionActions]}`;

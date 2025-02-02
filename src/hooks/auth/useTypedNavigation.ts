@@ -1,13 +1,13 @@
-import { useLocalSearchParams } from "expo-router";
-
+import { AllRoutes, APP_ROUTES } from "@/src/routes/routes";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Route } from "expo-router";
 
-import { APP_ROUTES } from "./routes";
 
-import { useRouter } from "expo-router";
-import { AllRoutes } from "./routes";
+
+
 
 /**
+
  * 4) Extraímos as chaves do tipo AllRoutes. ( "HOME" | "ABOUT" | ...)
  */
 type RouteKeys = keyof AllRoutes;
