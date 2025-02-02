@@ -46,10 +46,11 @@ export default function SignIn() {
   } = useForm<formFields>({
     resolver: zodResolver(schema),
     defaultValues: {
-      emailOrUsername: "teste@gmail.com",
+      emailOrUsername: "rodrigo@gmail.com",
       password: "12345678",
     },
   });
+
 
   const refUserEmail = useRef<TextInput>(null);
   const refPassword = useRef<TextInput>(null);
@@ -57,7 +58,9 @@ export default function SignIn() {
 
   const onSubmit = async (data: formFields) => {
     return await AuthAPI.login(data.emailOrUsername, data.password)
-      .then((x) => console.log("success", console.log(x.teams)))
+      .then((x) => {
+        console.log("success", x); 
+      })
       .catch((e) => console.log("error", e));
   };
 

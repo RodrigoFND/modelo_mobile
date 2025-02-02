@@ -16,7 +16,7 @@ import {
 } from "@tanstack/react-query";
 import { Entypo } from "@expo/vector-icons";
 import * as Font from "expo-font";
-import { AuthProvider } from "@/src/providers/authTest/AuthProviderTest";
+import { AuthProviderAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
 import { ClerkProvider } from "@clerk/clerk-expo";
 import { tokenCache } from "@/src/utils/secureStore/oAuthStore/oAuthStore";
 import { Theme } from "@/src/styles/theme.style";
@@ -145,9 +145,9 @@ function RootLayoutNav() {
   /* console.log(PUBLIC_CLERK_PUBLISHABLE_KEY); */
   return (
     <ThemeProvider>
-      <AuthProvider>
+      <AuthProviderAppwrite>
         <Slot />
-      </AuthProvider>
+      </AuthProviderAppwrite>
     </ThemeProvider>
   );
 }

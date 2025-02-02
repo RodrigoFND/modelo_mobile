@@ -1,5 +1,17 @@
-import { Databases, ID } from 'react-native-appwrite';
+import { Databases, ID, Query } from 'react-native-appwrite';
 import { DATABASE_CONFIG } from '../config/database.config';
+
+interface UserDocument {
+  documentId: string;
+  accountId: string;
+  username: string;
+  email: string;
+  avatar: URL;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+
 
 class UserRepository {
   private databases: Databases;
@@ -39,16 +51,18 @@ class UserRepository {
     }
   }
 
-  async getUserDocument(userId: string) {
+  async getUserDocument(userId: string): Promise<UserDocument> {
     try {
-      return await this.databases.listDocuments(
+      const user = await this.databases.listDocuments(
         DATABASE_CONFIG.databaseId,
         DATABASE_CONFIG.collections.users,
-        [`accountId=${userId}`]
+        [Query.equal("accountId", userId)]
       );
+      return user.documents[0] as unknown as UserDocument;
     } catch (error) {
       throw error;
     }
+
   }
 }
 

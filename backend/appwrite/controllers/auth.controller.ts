@@ -1,5 +1,6 @@
 import AuthService from "../services/auth.service";
 import ServiceManager from "../services";
+import { User } from "@/src/models/services/auth/auth.models";
 
 class AuthController {
   private authService: AuthService;
@@ -17,7 +18,7 @@ class AuthController {
     return user;
   }
 
-  async loginUser(email: string, password: string) {
+  async loginUser(email: string, password: string): Promise<User> {
     return await this.authService.login(email, password);
   }
 

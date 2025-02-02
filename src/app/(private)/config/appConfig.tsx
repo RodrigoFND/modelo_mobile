@@ -1,151 +1,141 @@
-import { View, Text } from "react-native";
+import { PermissionsList, User } from "@/src/models/services/auth/auth.models";
+import { PermissionActions } from "@/src/models/services/auth/auth.models";
+import { useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
+import { router } from "expo-router";
+import { View, Text, Button } from "react-native";
+import { APP_ROUTES } from "@/src/routes/routes";
+import { useTypedNavigation } from "@/src/routes/useTypedNavigation";
 
-type Comments = {
-  id: string;
-  body: string;
-  authorId: string;
-  createdAt: Date;
+// 🔹 Estrutura de dados para cada recurso
+type ResourceData = {
+  comments: {
+    id: string;
+    body: string;
+    authorId: string;
+    createdAt: Date;
+  };
+  todos: {
+    id: string;
+    title: string;
+    userId: string;
+    completed: boolean;
+    invitedUsers: string[];
+  };
+  projects: {
+    id: string;
+    name: string;
+    ownerId: string;
+    members: string[];
+  };
 };
 
-type Todo = {
-  id: string;
-  title: string;
-  userId: string;
-  completed: boolean;
-  invitedUsers: string[];
-};
-
-// 🔹 Definição das ações permitidas para cada recurso
-type PermissionActions = {
-  comments: "view" | "create" | "update";
-  todos: "view" | "create" | "update" | "delete";
-};
-
-// 🔹 Lista válida de permissões
-type PermissionsList = `${keyof PermissionActions}:${PermissionActions[keyof PermissionActions]}`;
-
-// 🔹 Estrutura com Type Safety total
+// 🔹 Estrutura tipada para cada Role
 type RolesStructure = {
   [R in keyof PermissionActions]: {
     [A in PermissionActions[R]]: {
       page: boolean;
-      resourceCheck: (user: UserSession, data: any) => boolean;
+      resourceCheck: (user: User, data: ResourceData[R]) => boolean;
     };
   };
 };
 
-// 🔹 Estrutura do usuário (agora usamos apenas `UserSession`)
-type UserSession = {
-  session: {
-    $id: string;
-    userId: string;
-    expire: string;
-  };
-  blockedBy: string[];
-  teams: {
-    teamId: string;
-    teamName: string; // 🔹 Agora sabemos que `teamName` = `role`
-    permissions: PermissionsList[];
-  }[];
-};
 
-// 🔹 Função para extrair roles e permissions do usuário baseado na API
-function getUserRolesAndPermissions(userData: UserSession) {
-  const roles = userData.teams.map((team) => team.teamName); // 🔹 Pegamos todos os teamNames como roles
-  const permissions = userData.teams.flatMap((team) => team.permissions); // 🔹 Pegamos todas as permissões
-
-  return { roles, permissions };
-}
-
-// 🔹 Definição das permissões dinâmicas
+// 🔹 Função para gerar permissões com base no backend
 const ROLES = (permissions: PermissionsList[]): RolesStructure => ({
   comments: {
     view: {
       page: permissions.includes("comments:view"),
-      resourceCheck: (user: UserSession, comment: Comments) => !user.blockedBy.includes(comment.authorId),
+      resourceCheck: (user, comment) => true,
     },
+
     create: {
       page: permissions.includes("comments:create"),
-      resourceCheck: () => true, // Criar não precisa verificar recurso específico
+      resourceCheck: () => true,
     },
     update: {
       page: permissions.includes("comments:update"),
-      resourceCheck: (user: UserSession, comment: Comments) => comment.authorId === user.session.userId,
+      resourceCheck: (user, comment) => comment.authorId === user.id,
     },
   },
   todos: {
     view: {
       page: permissions.includes("todos:view"),
-      resourceCheck: (user: UserSession, todo: Todo) => !user.blockedBy.includes(todo.userId),
+      resourceCheck: (user, todo) => true,
     },
+
     create: {
       page: permissions.includes("todos:create"),
       resourceCheck: () => true,
     },
     update: {
       page: permissions.includes("todos:update"),
-      resourceCheck: (user: UserSession, todo: Todo) => todo.userId === user.session.userId || todo.invitedUsers.includes(user.session.userId),
+      resourceCheck: (user, todo) => todo.userId === user.id || todo.invitedUsers.includes(user.id),
     },
     delete: {
       page: permissions.includes("todos:delete"),
-      resourceCheck: (user: UserSession, todo: Todo) => (todo.userId === user.session.userId || todo.invitedUsers.includes(user.session.userId)) && todo.completed,
-
+      resourceCheck: (user, todo) => (todo.userId === user.id || todo.invitedUsers.includes(user.id)) && todo.completed,
+    },
+  },
+  projects: {
+    view: {
+      page: permissions.includes("projects:view"),
+      resourceCheck: (user, project) => project.members.includes(user.id),
+    },
+    create: {
+      page: permissions.includes("projects:create"),
+      resourceCheck: () => true,
+    },
+    update: {
+      page: permissions.includes("projects:update"),
+      resourceCheck: (user, project) => project.ownerId === user.id || project.members.includes(user.id),
+    },
+    delete: {
+      page: permissions.includes("projects:delete"),
+      resourceCheck: (user, project) => project.ownerId === user.id,
     },
   },
 });
 
-// 🔹 Função hasPermission() melhorada
-export function hasPermission<Resource extends keyof RolesStructure, Action extends keyof RolesStructure[Resource]>(
-  user: UserSession,
+// 🔹 Função genérica para verificar permissões
+export function hasPermission<
+  Resource extends keyof RolesStructure,
+  Action extends keyof RolesStructure[Resource]
+>(
+  user: User,
   permissions: PermissionsList[],
   resource: Resource,
   action: Action,
-  data?: Resource extends "comments" ? Comments : Todo
+  data?: ResourceData[Resource]
 ): boolean {
   try {
     const rolePermissions = ROLES(permissions);
+    console.log("rolePermissions", (resource in rolePermissions) );
+
+    if (!(resource in rolePermissions) || !(action in rolePermissions[resource])) {
+      return false;
+    }
+
     const permission = rolePermissions[resource][action];
 
+    // 🔹 Se for apenas para verificar a página, retorna o boolean diretamente
     if (!data) {
       return permission.page;
     }
 
-    return permission.resourceCheck(user, data);
+    // 🔹 Se for uma verificação de recurso, chama a função de verificação
+    return permission.page && permission.resourceCheck(user, data);
   } catch (error) {
     return false;
   }
 }
 
-// 🔹 Simulação de dados da API do backend
-const userData: UserSession = {
-  session: {
-    $id: "1",
-    userId: "user_123",
-    expire: "2025-12-31T23:59:59.999Z",
-  },
-  blockedBy: ["2"],
-  teams: [
-    {
-      teamId: "team_1",
-      teamName: "basic",
-      permissions: ["comments:create"],
-    },
-    {
-      teamId: "team_2",
-      teamName: "admin",
-      permissions: ["todos:view"],
-    },
-  ],
-};
-
-// 🔹 Extraímos roles e permissions a partir do backend
-const { roles, permissions } = getUserRolesAndPermissions(userData);
-
 // 🔹 Exemplo de uso correto
 export default function AppConfig() {
-  const user = userData; // Agora usamos apenas `userData`
+  const { user, permissions, updateSession } = useAuthAppwrite();
+  const { navigate } = useTypedNavigation();
+  console.log("permissions", permissions);
 
-  const todo: Todo = {
+  const todo = {
     completed: false,
     id: "3",
     invitedUsers: [],
@@ -153,37 +143,53 @@ export default function AppConfig() {
     userId: "1",
   };
 
-  const comment: Comments = {
+  const comment = {
     id: "10",
     body: "Hello World",
-    authorId: "2",
+    authorId: "1",
     createdAt: new Date(),
   };
 
+  const project = {
+    id: "20",
+    name: "My Project",
+    ownerId: "1",
+    members: ["1", "2", "3"],
+  };
+
+  
   return (
     <View>
-      {hasPermission(user, permissions, "comments", "create") ? (
+      <Button title="Ir para myRoute" onPress={() => router.push(APP_ROUTES.MYROUTE.path)} />
+      <Button title="Ir para myRoute com safeRouter" onPress={() => navigate({ route: 'MYROUTE' })} />
+      <Button title="Update Session" onPress={updateSession} />
+
+
+
+    {/*   { user && hasPermission(user, permissions, "comments", "create") ? (
         <Text style={{ color: "green" }}>Can create comment</Text>
       ) : (
         <Text style={{ color: "red" }}>Cannot create comment</Text>
       )}
 
-      {hasPermission(user, permissions, "todos", "view") ? (
+      {user && hasPermission(user, permissions, "todos", "view") ? (
         <Text style={{ color: "green" }}>Can view all todos</Text>
       ) : (
         <Text style={{ color: "red" }}>Cannot view all todos</Text>
       )}
-
-      {hasPermission(user, permissions, "todos", "view", todo) ? (
+ */}
+      {user && hasPermission(user, permissions, "todos", "view", todo) ? (
         <Text style={{ color: "green" }}>Can view this specific todo</Text>
       ) : (
         <Text style={{ color: "red" }}>Cannot view this specific todo</Text>
       )}
-      {hasPermission(user, permissions, "comments", "view", comment) ? (
-        <Text style={{ color: "green" }}>Can view this specific comment</Text>
+
+
+   {/*    {user && hasPermission(user, permissions, "projects", "view", project) ? (
+        <Text style={{ color: "green" }}>Can view this project</Text>
       ) : (
-        <Text style={{ color: "red" }}>Cannot view this specific comment</Text>
-      )}
+        <Text style={{ color: "red" }}>Cannot view this project</Text>
+      )} */}
 
     </View>
   );
