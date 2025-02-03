@@ -1,5 +1,5 @@
 import { useFonts } from "expo-font";
-import { Slot, Stack } from "expo-router";
+import { Redirect, router, Slot, Stack, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useState } from "react";
@@ -16,7 +16,7 @@ import {
 } from "@tanstack/react-query";
 import { Entypo } from "@expo/vector-icons";
 import * as Font from "expo-font";
-import { AuthProviderAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
+import { AuthProviderAppwrite, useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
 import { ClerkProvider } from "@clerk/clerk-expo";
 import { tokenCache } from "@/src/utils/secureStore/oAuthStore/oAuthStore";
 import { Theme } from "@/src/styles/theme.style";
@@ -136,18 +136,39 @@ export default function RootLayout() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <RootLayoutNav />
+      <ThemeProvider>
+        <AuthProviderAppwrite>
+          <RootLayoutNav />
+        </AuthProviderAppwrite>
+      </ThemeProvider>
     </View>
   );
 }
 
 function RootLayoutNav() {
+  const {isLoading,isAuthenticated } = useAuthAppwrite();
+  const segments = useSegments();
+
+
+  useEffect(() => {
+    if(isLoading){
+      return;
+    }
+    const inAuthGroup = segments[0] === "(private)";
+    const isPublicRoute = segments[0] === "(public)";
+    if(isAuthenticated && !inAuthGroup) 
+      router.replace("/(private)/config/appConfig");
+    else if(!isAuthenticated && !isPublicRoute)
+      router.replace("/(public)/signIn");
+  }, [isLoading,isAuthenticated,segments]);
+
+
+  if(isLoading){
+    return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text style={{ fontSize: 20, fontWeight: "bold",color:'red' }}>Loading...</Text>
+    </View>
+  }
+
   /* console.log(PUBLIC_CLERK_PUBLISHABLE_KEY); */
-  return (
-    <ThemeProvider>
-      <AuthProviderAppwrite>
-        <Slot />
-      </AuthProviderAppwrite>
-    </ThemeProvider>
-  );
+  return <Slot />;  
 }

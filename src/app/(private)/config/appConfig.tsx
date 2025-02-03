@@ -10,7 +10,7 @@ import { hasRoutePermission } from "@/src/routes/routePermissions/routePermissio
 // 🔹 Exemplo de uso correto
 
 export default function AppConfig() {
-  const { user, permissions, updateSession } = useAuthAppwrite();
+  const { user, permissions, updateSession,logout } = useAuthAppwrite();
   const { navigate } = useTypedNavigation();
   console.log("permissions", permissions);
 
@@ -40,9 +40,10 @@ export default function AppConfig() {
   return (
     <View>
       <Text>User permissions: {permissions.join(", ")}</Text>
-      <Button title="Ir para myRoute" onPress={() => router.push(APP_ROUTES.PRIVATE_MYROUTE.path)} />
+      <Button title="Ir para myRoute" onPress={() => router.push('/')} />
       <Button title="Ir para myRoute com safeRouter" onPress={() => navigate({ route: 'PRIVATE_MYROUTE' })} />
-      <Button title="Update Session" onPress={updateSession} />
+      <Button title="Logout" onPress={logout} />
+
 
 
 

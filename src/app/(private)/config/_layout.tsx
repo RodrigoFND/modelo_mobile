@@ -9,9 +9,10 @@ import { View, Text } from 'react-native';
 const appConfig = APP_ROUTES.PRIVATE_APPCONFIG;
   const myRoute = APP_ROUTES.PRIVATE_MYROUTE;
 export default function ConfigLayout() {
-  const {isLoading} = usePrivateRouteGuard([appConfig,myRoute])
+  const {isLoading} = usePrivateRouteGuard({routesToProtect:[appConfig,myRoute],fallback:'/(private)/fallback'})
   console.log("ConfigLayout");
 /*   const {isLoading} = useProtectedRoute([appConfig,myRoute]) */
+
 
   if (isLoading) {
     return <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
@@ -27,6 +28,7 @@ export default function ConfigLayout() {
         <Stack.Screen name={appConfig.name} options={{ headerShown: true, title: appConfig.name }} />
 
         <Stack.Screen name={myRoute.name} options={{ headerShown: true, title: myRoute.name }} />
+        <Stack.Screen name="fallback" options={{ headerShown: false }} />
 
     </Stack>
   );

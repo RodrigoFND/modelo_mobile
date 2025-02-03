@@ -18,6 +18,7 @@ import { Input } from "@/src/components/atom/input/Input";
 import { AuthAPI } from "@/src/services/appwrite/auth/auth.service";
 import { useGoogleAuth } from "@/src/app2/t";
 import AppWriteClient from "@/backend/appwrite/config/appwrite.client";
+import { useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
 
 /* forios -  11195953346-mlog0out7hg9ior8pptb76ik5dscetph.apps.googleusercontent.com */
 /* forandroid - 11195953346-e82kjuiknd48cfb2mjj31ifksoctpgvq.apps.googleusercontent.com */
@@ -37,8 +38,8 @@ const schema = z.object({
 });
 
 export default function SignIn() {
-  const { login } = useGoogleAuth();
 
+  const { isAuthenticated,login,logout,updateSession } = useAuthAppwrite();
   const {
     control,
     handleSubmit,
@@ -57,37 +58,25 @@ export default function SignIn() {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const onSubmit = async (data: formFields) => {
-    return await AuthAPI.login(data.emailOrUsername, data.password)
+    return await login(data.emailOrUsername, data.password)
       .then((x) => {
         console.log("success", x); 
       })
       .catch((e) => console.log("error", e));
   };
 
-
-
   const handleLogout = async () => {
-    return await AuthAPI.logout()
-      .then((x) => console.log("success", x))
-      .catch((e) => console.log("error", e));
-  };
-
-  const handleGetTeams = async () => {
-    return await AppWriteClient.teams
-      .get("679cb2da00374ecb5393")
+    return await logout()
       .then((x) => console.log("success", x))
       .catch((e) => console.log("error", e));
   };
 
   const handleGetCurrentSession = async () => {
-    return await AuthAPI.getCurrentSession()
+    return await updateSession()
       .then((x) => console.log("success", x))
       .catch((e) => console.log("error", e));
   };
 
-  const handleLoginWithGoogle = () => {
-    login();
-  };
 
   return (
     <KeyboardAvoidingView
@@ -105,6 +94,16 @@ export default function SignIn() {
             }}
           >
             SignIn
+          </Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: "black",
+              marginBottom: 20,
+            }}
+          >
+            IsAuthenticated: {isAuthenticated ? "true" : "false"}
           </Text>
 
           <Controller

@@ -24,15 +24,12 @@ const PRIVATE_ROUTES: PrivateRoutes = {
   PRIVATE_APPCONFIG: {
     name: "appConfig",
     path: "/(private)/config/appConfig",
-    redirect: "/",
     permission: [],
   },
-
 
   PRIVATE_MYROUTE: {
     name: "myRoute",
     path: "/(private)/config/myRoute",
-    redirect: "/",
     permission: [],
   },
 }

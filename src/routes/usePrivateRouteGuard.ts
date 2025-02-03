@@ -1,7 +1,7 @@
 // src/hooks/usePrivateRouteGuard.ts
 
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "expo-router";
+import { Route, usePathname, useRouter, useSegments } from "expo-router";
 import { useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
 
 import { PermissionsList } from "@/src/models/services/auth/auth.models";
@@ -14,58 +14,55 @@ import { MyRoutes } from "@/src/routes/routes";
  * @param fallback Rota de fallback caso o user não tenha acesso. (default "/(public)/signIn")
  * @returns { isLoading: boolean } - indica se ainda está carregando user/permissões
  */
-export function usePrivateRouteGuard(
-  routesToProtect: MyRoutes[],
-  fallback: string = "/(public)/signIn"
 
-) {
+type PrivateRouteGuardProps = {
+  routesToProtect: MyRoutes[];
+  fallback: Route;
+}
+
+export function usePrivateRouteGuard({routesToProtect,fallback}:PrivateRouteGuardProps) {
   const [guardLoading, setGuardLoading] = useState(true);
 
-  const pathname = usePathname();        // ex. "/(private)/config/appConfig"
+  const segments = useSegments();
   const router = useRouter();
-  const { user, permissions } = useAuthAppwrite();
+  const { user, permissions, isLoading: isLoadingUser } = useAuthAppwrite();
 
   useEffect(() => {
+    if (isLoadingUser) {
+      return;
+    }
 
-    const matchingRoute = routesToProtect.find(route => route.path.includes(pathname));
+    const currentPath = `/${segments.join("/")}`;
+    const matchingRoute = routesToProtect.find((route) =>
+      currentPath.startsWith(route.path)
+    );
     if (!matchingRoute) {
-        router.replace('../');
+      router.replace(fallback);
       setGuardLoading(false);
       return;
     }
+    console.log("segments", segments);
 
-
-    // 2. Se a rota está protegida mas não existe 'user', redireciona
     if (!user) {
-      console.log("user", "nao existe");
-      router.replace(matchingRoute.redirect || '../');
+      router.replace(matchingRoute.redirect || fallback);
       setGuardLoading(false);
       return;
     }
 
-
-    // 3. Verifica se o user possui TODAS as permissões necessárias
     const missingPermission = matchingRoute.permission.find(
       (p) => !permissions.includes(p as PermissionsList)
     );
 
-
     if (missingPermission) {
-      console.log("missingPermission", missingPermission);
-      // Falta permissão => redireciona
-      router.replace(matchingRoute.redirect || '/');
+      router.replace(matchingRoute.redirect || fallback);
       setGuardLoading(false);
       return;
-
-
     }
 
-    // 4. Se passou em todas as checagens, libera
     setGuardLoading(false);
-  }, [pathname, user, permissions, routesToProtect, router, fallback]);
+  }, [segments, user, permissions, routesToProtect, router]);
 
-  // Retornamos 'isLoading' (true enquanto estiver checando ou user estiver carregando)
   return {
-    isLoading: guardLoading,
+    isLoading: guardLoading || isLoadingUser,
   };
 }

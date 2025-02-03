@@ -1,6 +1,16 @@
-import { PermissionsList, Roles, User } from '@/src/models/services/auth/auth.models';
-import { AuthAPI } from '@/src/services/appwrite/auth/auth.service';
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import {
+  PermissionsList,
+  Roles,
+  User,
+} from "@/src/models/services/auth/auth.models";
+import { AuthAPI } from "@/src/services/appwrite/auth/auth.service";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 
 type AuthAppwriteContextType = {
   user: User | null;
@@ -8,15 +18,17 @@ type AuthAppwriteContextType = {
   permissions: PermissionsList[];
   isAuthenticated: boolean;
   login: (emailOrUsername: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 
-  updateSession: () => void;
+  updateSession: () => Promise<void>;
   isLoading: boolean;
 };
 
 const AuthAppwriteContext = createContext<AuthAppwriteContextType | null>(null);
 
-export const AuthProviderAppwrite: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProviderAppwrite: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [roles, setRoles] = useState<Roles[]>([]);
   const [permissions, setPermissions] = useState<PermissionsList[]>([]);
@@ -51,7 +63,7 @@ export const AuthProviderAppwrite: React.FC<{ children: React.ReactNode }> = ({ 
     setUser(null);
     setRoles([]);
     setPermissions([]);
-  }
+  };
 
   const getCurrentSession = useCallback(async (): Promise<User | null> => {
     try {
@@ -62,29 +74,30 @@ export const AuthProviderAppwrite: React.FC<{ children: React.ReactNode }> = ({ 
     }
   }, []);
 
-  const login = useCallback(async (emailOrUsername: string, password: string) => {
-    try {
-      const user = await AuthAPI.login(emailOrUsername, password);
-      fillUserData(user);
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      throw new Error("Falha ao autenticar usuário.");
-    }
-  }, []);
+  const login = useCallback(
+    async (emailOrUsername: string, password: string) => {
+      try {
+        const user = await AuthAPI.login(emailOrUsername, password);
+        fillUserData(user);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error("Erro ao fazer login:", error);
+        throw new Error("Falha ao autenticar usuário.");
+      }
+    },
+    []
+  );
 
   const updateSession = useCallback(async () => {
-    if (!isAuthenticated) return;
-    const user = await getCurrentSession();
-    if (user) {
-      fillUserData(user);
+    if (!isAuthenticated && !user) return;
+    const session = await getCurrentSession();
+    if (session) {
+      fillUserData(session);
     }
-  }, [isAuthenticated]);
-
+  }, [isAuthenticated, user]);
 
   const logout = useCallback(async () => {
     try {
-
       await AuthAPI.logout();
     } catch (error) {
       console.error("Erro ao deslogar:", error);
@@ -95,17 +108,27 @@ export const AuthProviderAppwrite: React.FC<{ children: React.ReactNode }> = ({ 
   }, []);
 
   return (
-    <AuthAppwriteContext.Provider value={{ user, roles, permissions, isAuthenticated, login, logout, updateSession, isLoading }}>
+    <AuthAppwriteContext.Provider
+      value={{
+        user,
+        roles,
+        permissions,
+        isAuthenticated,
+        login,
+        logout,
+        updateSession,
+        isLoading,
+      }}
+    >
       {children}
     </AuthAppwriteContext.Provider>
   );
-
 };
 
 export const useAuthAppwrite = () => {
   const context = useContext(AuthAppwriteContext);
   if (!context) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+    throw new Error("useAuth deve ser usado dentro de um AuthProvider");
   }
   return context;
 };
