@@ -13,8 +13,8 @@ interface InputIconStylesProps {
 }
 
 const iconSizeMap: { [key in InputVariants]: number } = {
-  md: scaleSize(28),
-  lg: scaleSize(32),
+  md: scaleSize(26),
+  lg: scaleSize(28),
 };
 
 const iconColorMap: {

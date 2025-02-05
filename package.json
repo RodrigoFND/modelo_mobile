@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "eas env:pull --environment development && cross-env NODE_ENV=development expo start",
+    "start": "expo start --reset-cache",
     "start:preview": "eas env:pull --environment preview && cross-env NODE_ENV=test expo start",
     "start:prod": "eas env:pull --environment production && cross-env NODE_ENV=production expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -44,6 +44,7 @@
     "expo-symbols": "~0.2.0",
     "expo-system-ui": "~4.0.5",
     "expo-web-browser": "~14.0.1",
+    "lodash": "^4.17.21",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.54.2",
@@ -63,6 +64,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/jest": "^29.5.12",
+    "@types/lodash": "^4.17.15",
     "@types/react": "~18.3.12",
     "@types/react-test-renderer": "^18.3.0",
     "cross-env": "^7.0.3",

@@ -1,13 +1,19 @@
-import { authController } from "@/backend/appwrite";
+import { authController, testeController } from "@/backend/appwrite";
+import { EventEmitter } from "eventemitter3";
 
 class ApiClient {
   private static instance: ApiClient;
 
   public auth;
+  public teste;
+  public experiedSessionEvent: EventEmitter;
 
   private constructor() {
     this.auth = this.createProxy(authController);
+    this.teste = this.createProxy(testeController);
+    this.experiedSessionEvent = new EventEmitter();
   }
+
 
 
   static getInstance(): ApiClient {
@@ -23,21 +29,24 @@ class ApiClient {
       return await callback();
     } catch (error: any) {
       console.error("Erro na API:", error);
+      console.log("error code", error);
 
-      if (error.response?.status === 401) {
+      if (error?.code === 401) {
         console.warn("Sessão expirada. Redirecionando para login...");
+        this.experiedSessionEvent.emit("sessionExpired");
         return Promise.reject({ message: "Usuário inválido ou sessão expirada", code: 401 });
       }
 
-      if (error.response?.status === 403) {
+      if (error?.code === 403) {
         return Promise.reject({ message: "Acesso negado", code: 403 });
       }
 
-      if (error.response?.status === 500) {
+      if (error?.code === 500) {
         return Promise.reject({ message: "Erro interno no servidor", code: 500 });
       }
 
-      return Promise.reject(error);
+
+      return Promise.reject(error?.message || error);
     }
   }
 

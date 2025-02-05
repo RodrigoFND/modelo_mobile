@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+/* import { EventEmitter } from 'events';
 
 const authEventEmitter = new EventEmitter();
 
@@ -10,3 +10,4 @@ export const AUTH_EVENTS = {
 
 
 export default authEventEmitter;
+ */

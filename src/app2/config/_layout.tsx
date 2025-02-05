@@ -1,7 +1,6 @@
-import { APP_ROUTES } from '@/src/routes/routes';
+/* import { APP_ROUTES } from '@/src/routes/routes';
 import { Stack, useLocalSearchParams, useRouter, useSegments } from 'expo-router';
-/* import { useProtectedRoute } from '../../hooks/useProtectedRoute';
-import { usePermissions } from '../../hooks/usePermissions'; */
+
 import { ProtectedRoute } from '@/src/routes/PrivateRoute';
 import { usePrivateRouteGuard } from '@/src/routes/usePrivateRouteGuard';
 import { View, Text } from 'react-native';
@@ -11,7 +10,6 @@ const appConfig = APP_ROUTES.PRIVATE_APPCONFIG;
 export default function ConfigLayout() {
   const {isLoading} = usePrivateRouteGuard({routesToProtect:[appConfig,myRoute],fallback:'/(private)/fallback'})
   console.log("ConfigLayout");
-/*   const {isLoading} = useProtectedRoute([appConfig,myRoute]) */
 
 
   if (isLoading) {
@@ -33,3 +31,4 @@ export default function ConfigLayout() {
     </Stack>
   );
 }
+ */

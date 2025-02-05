@@ -59,9 +59,6 @@ export default function RootLayout() {
     SpaceMono: require("@/src/assets/fonts/SpaceMono-Regular.ttf"),
   });
 
-  console.log("clerkPublishableKey", AmbientVariables.clerkPublishableKey);
-  console.log("apiUrl", AmbientVariables.apiUrl);
-
   useEffect(() => {
     async function prepare() {
       try {

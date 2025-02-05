@@ -1,4 +1,4 @@
-import { View, Text, Button } from "react-native";
+/* import { View, Text, Button } from "react-native";
 
 import { useTypedNavigation } from "@/src/hooks/auth/useTypedNavigation";
 import { APP_ROUTES } from "@/src/routes/routes";
@@ -7,7 +7,7 @@ import { router } from "expo-router";
 import { hasRoutePermission } from "@/src/routes/routePermissions/routePermission";
 
 
-// 🔹 Exemplo de uso correto
+
 
 export default function AppConfig() {
   const { user, permissions, updateSession,logout } = useAuthAppwrite();
@@ -41,25 +41,14 @@ export default function AppConfig() {
     <View>
       <Text>User permissions: {permissions.join(", ")}</Text>
       <Button title="Ir para myRoute" onPress={() => router.push('/')} />
-      <Button title="Ir para myRoute com safeRouter" onPress={() => navigate({ route: 'PRIVATE_MYROUTE' })} />
+
       <Button title="Logout" onPress={logout} />
 
 
 
 
 
-    {/*   { user && hasPermission(user, permissions, "comments", "create") ? (
-        <Text style={{ color: "green" }}>Can create comment</Text>
-      ) : (
-        <Text style={{ color: "red" }}>Cannot create comment</Text>
-      )}
 
-      {user && hasPermission(user, permissions, "todos", "view") ? (
-        <Text style={{ color: "green" }}>Can view all todos</Text>
-      ) : (
-        <Text style={{ color: "red" }}>Cannot view all todos</Text>
-      )}
- */}
       {user && hasRoutePermission(user, permissions, "todos", "view", todo) ? (
         <Text style={{ color: "green" }}>Can view this specific todo</Text>
       ) : (
@@ -67,12 +56,8 @@ export default function AppConfig() {
       )}
 
 
-   {/*    {user && hasPermission(user, permissions, "projects", "view", project) ? (
-        <Text style={{ color: "green" }}>Can view this project</Text>
-      ) : (
-        <Text style={{ color: "red" }}>Cannot view this project</Text>
-      )} */}
 
     </View>
   );
 }
+ */

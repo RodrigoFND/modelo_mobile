@@ -4,6 +4,7 @@ export interface Env {
     apiUrl: string;
     clerkPublishableKey: string;
     appwriteCollectionUsersId: string;
+    appwriteCollectionTesteId: string;
     appwriteDatabaseId: string;
     appwriteProjectId: string;
     appwriteEndpoint: string;

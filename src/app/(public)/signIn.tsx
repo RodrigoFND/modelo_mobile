@@ -14,8 +14,8 @@ import {
 import Button from "@/src/components/atom/button/Button";
 import { useRef } from "react";
 import Text from "@/src/components/atom/text/Text";
-import { Input } from "@/src/components/atom/input/Input";
-import { AuthAPI } from "@/src/services/appwrite/auth/auth.service";
+import  Input from "@/src/components/atom/input/Input";
+import { AuthService } from "@/src/services/appwrite/auth/auth.service";
 import { useGoogleAuth } from "@/src/app2/t";
 import AppWriteClient from "@/backend/appwrite/config/appwrite.client";
 import { useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
@@ -59,24 +59,7 @@ export default function SignIn() {
 
   const onSubmit = async (data: formFields) => {
     return await login(data.emailOrUsername, data.password)
-      .then((x) => {
-        console.log("success", x); 
-      })
-      .catch((e) => console.log("error", e));
   };
-
-  const handleLogout = async () => {
-    return await logout()
-      .then((x) => console.log("success", x))
-      .catch((e) => console.log("error", e));
-  };
-
-  const handleGetCurrentSession = async () => {
-    return await updateSession()
-      .then((x) => console.log("success", x))
-      .catch((e) => console.log("error", e));
-  };
-
 
   return (
     <KeyboardAvoidingView
@@ -95,16 +78,7 @@ export default function SignIn() {
           >
             SignIn
           </Text>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: "black",
-              marginBottom: 20,
-            }}
-          >
-            IsAuthenticated: {isAuthenticated ? "true" : "false"}
-          </Text>
+       
 
           <Controller
             control={control}
@@ -121,10 +95,7 @@ export default function SignIn() {
               >
                 <Input.Email
                   ref={refUserEmail}
-                  onChangeText={(text) => {
-                    onChange(text);
-                    console.log(text);
-                  }}
+                  onChangeText={onChange}
                   onBlur={onBlur}
                   value={value}
                   placeholder="Email or Username"
@@ -153,10 +124,7 @@ export default function SignIn() {
               >
                 <Input.Text
                   ref={refPassword}
-                  onChangeText={(text) => {
-                    onChange(text);
-                    console.log(text);
-                  }}
+                  onChangeText={onChange}
                   onBlur={onBlur}
                   value={value}
                   placeholder="Password"
@@ -187,23 +155,7 @@ export default function SignIn() {
           >
             <Button.Text>Submit</Button.Text>
           </Button.Root>
-          <Button.Root
-            onPress={handleLogout}
-            variant="lg"
-            action="defaultInverted"
-            loading={isSubmitting}
-          >
-            <Button.Text>Logout</Button.Text>
-          </Button.Root>
-
-          <Button.Root
-            onPress={handleGetCurrentSession}
-            variant="lg"
-            action="defaultInverted"
-            loading={isSubmitting}
-          >
-            <Button.Text>Get Current Session</Button.Text>
-          </Button.Root>
+   
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

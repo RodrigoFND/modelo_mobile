@@ -1,4 +1,3 @@
-import { useFocusNotifyOnChangeProps } from '@/hooks/useFocusNotifyOnChangeProps';
 import { getUsers } from '@/src/services/teste-api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -42,7 +41,7 @@ const userStoreQueryKey = 'users'
     });
   
 
-    return usersQuery;
+    return {...usersQuery};
   };
 
   export const updateUser = () => {

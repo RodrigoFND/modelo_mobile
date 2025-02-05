@@ -1,6 +1,7 @@
 // routePermission.ts
-import { PermissionsList, User } from "@/src/models/services/auth/auth.models";
-import { PermissionActions } from "@/src/models/services/auth/auth.models";
+import { PermissionsList, User } from "@/src/models/services/auth.models";
+import { PermissionActions } from "@/src/models/services/auth.models";
+import { MyRoutes } from "../routes";
 
 /**
  * 🔹 Estrutura de dados para cada recurso (você pode customizar)
@@ -52,7 +53,7 @@ type RolesStructure = {
  */
 export type Resource = keyof RolesStructure;
 
-/** 
+/**
  * 🔹 Se quiser um tipo Action que dependa do Resource específico, poderia ser
  *    <R extends Resource> = keyof RolesStructure[R].
  *    Porém, se quiser a união de todas as Actions possíveis em todo RolesStructure:
@@ -65,7 +66,9 @@ export type Action = {
  * 🔹 Função para gerar permissões com base nas permissions do usuário,
  *    retornando um objeto do tipo RolesStructure
  */
-const ROLES = (permissions: PermissionsList[]): RolesStructure => ({
+const generateRolePermissions = (
+  permissions: PermissionsList[]
+): RolesStructure => ({
   comments: {
     view: {
       page: permissions.includes("comments:view"),
@@ -131,7 +134,7 @@ const ROLES = (permissions: PermissionsList[]): RolesStructure => ({
  *    Resource => "comments" | "todos" | "projects"
  *    Action   => correspondente às chaves de PermissionActions[R]
  */
-export function hasRoutePermission<
+function hasRoutePermission<
   R extends Resource,
   A extends keyof RolesStructure[R]
 >(
@@ -142,7 +145,7 @@ export function hasRoutePermission<
   data?: ResourceData[R]
 ): boolean {
   try {
-    const rolePermissions = ROLES(permissions);
+    const rolePermissions = generateRolePermissions(permissions);
 
     if (
       !(resource in rolePermissions) ||
@@ -163,4 +166,41 @@ export function hasRoutePermission<
   } catch (error) {
     return false;
   }
+}
+
+/**
+ * 🔹 Função para verificar se o usuário tem permissão para acessar uma rota
+ *    Route => MyRoutes
+ *    User => User | null
+ *    PermissionsList => PermissionsList[]
+ */
+
+export function canUserAccessPage<P extends Record<string, string> | undefined>(
+  route: MyRoutes<P>,
+  user: User | null,
+  myPermissions: PermissionsList[]
+) {
+  if (!user) return false;
+
+  return route.permission.every((perm) => {
+    const [resource, action] = perm.split(":") as [Resource, Action];
+    return hasRoutePermission(
+      user,
+      myPermissions,
+      resource || "",
+      action || ""
+    );
+  });
+}
+
+export function canUserAccessPageResource(
+  user: User | null,
+  myPermissions: PermissionsList[],
+  resource: Resource,
+  action: Action,
+  data: ResourceData[Resource]
+) {
+  if (!user) return false;
+
+  return hasRoutePermission(user, myPermissions, resource, action, data);
 }

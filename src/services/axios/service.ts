@@ -1,7 +1,7 @@
 import {
   LoginResponse,
   RefreshTokenResponse,
-} from "@/src/models/services/auth/auth.models";
+} from "@/src/models/services/auth.models";
 import authEventEmitter from "@/src/utils/emitters/authEvents";
 import { AUTH_EVENTS } from "@/src/utils/emitters/authEvents";
 import {

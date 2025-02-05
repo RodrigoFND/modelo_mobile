@@ -1,6 +1,6 @@
 import AuthService from "../services/auth.service";
 import ServiceManager from "../services";
-import { User } from "@/src/models/services/auth/auth.models";
+import { User } from "@/src/models/services/auth.models";
 
 class AuthController {
   private authService: AuthService;
@@ -25,6 +25,11 @@ class AuthController {
   async logoutUser() {
     return await this.authService.logout()
   }
+
+  async logoutAllSessions() {
+    return await this.authService.logoutAllSessions()
+  }
+
 }
 
 export default AuthController;

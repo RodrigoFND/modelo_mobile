@@ -1,4 +1,4 @@
-import { APP_ROUTES } from "@/src/routes/routes";
+/* import { APP_ROUTES } from "@/src/routes/routes";
 import {
   useTypedNavigation,
   useTypedSearchParams,
@@ -39,3 +39,4 @@ export default function TestScreen() {
     </View>
   );
 }
+ */

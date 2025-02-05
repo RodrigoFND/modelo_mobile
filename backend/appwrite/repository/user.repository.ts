@@ -1,5 +1,5 @@
-import { Databases, ID, Query } from 'react-native-appwrite';
-import { DATABASE_CONFIG } from '../config/database.config';
+import { AppwriteException, Databases, ID, Query } from "react-native-appwrite";
+import { DATABASE_CONFIG } from "../config/database.config";
 
 interface UserDocument {
   documentId: string;
@@ -11,18 +11,20 @@ interface UserDocument {
   updatedAt: Date;
 }
 
-
-
 class UserRepository {
   private databases: Databases;
 
   constructor(databases: Databases) {
     this.databases = databases;
   }
-  
-  async createUserDocument(userId: string, email: string, username: string, avatarUrl: URL) {
-    try {
 
+  async createUserDocument(
+    userId: string,
+    email: string,
+    username: string,
+    avatarUrl: URL
+  ) {
+    try {
       return await this.databases.createDocument(
         DATABASE_CONFIG.databaseId,
         DATABASE_CONFIG.collections.users,
@@ -31,14 +33,18 @@ class UserRepository {
           accountId: userId,
           email,
           username,
-          avatar: avatarUrl
+          avatar: avatarUrl,
         }
       );
-    } catch (error) {
-      throw error;
+    } catch (error: AppwriteException | any) {
+      throw {
+        code: error?.code || 500, // 🔹 Mantém o código HTTP original
+        message: `Erro ao criar documento do usuário: ${
+          error?.message || "Erro desconhecido"
+        }`,
+      };
     }
   }
-
 
   async getUsers() {
     try {
@@ -46,8 +52,13 @@ class UserRepository {
         DATABASE_CONFIG.databaseId,
         DATABASE_CONFIG.collections.users
       );
-    } catch (error) {
-      throw error;
+    } catch (error: AppwriteException | any) {
+      throw {
+        code: error?.code || 500, // 🔹 Mantém o código HTTP original
+        message: `Erro ao buscar documentos do usuário: ${
+          error?.message || "Erro desconhecido"
+        }`,
+      };
     }
   }
 
@@ -59,10 +70,14 @@ class UserRepository {
         [Query.equal("accountId", userId)]
       );
       return user.documents[0] as unknown as UserDocument;
-    } catch (error) {
-      throw error;
+    } catch (error: AppwriteException | any) {
+      throw {
+        code: error?.code || 500, // 🔹 Mantém o código HTTP original
+        message: `Erro ao buscar documento do usuário: ${
+          error?.message || "Erro desconhecido"
+        }`,
+      };
     }
-
   }
 }
 

@@ -13,4 +13,4 @@ const Input = {
     Email: InputEmail
 }
 
-export { Input };
+export default Input ;

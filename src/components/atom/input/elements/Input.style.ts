@@ -1,5 +1,4 @@
 import { useTheme } from "@/src/providers/ThemeProvider";
-import { scaleSize } from "@/src/styles/mixing.style";
 import { StyleSheet } from "react-native";
 import { InputStatus, InputVariants } from "../Input.model";
 import { BaseTheme } from "@/src/styles/theme.style";
@@ -24,12 +23,12 @@ const textSizeMap: {
 };
 
 const textColorMap: {
-    [key in InputStatus]: (theme: BaseTheme) => string;
+  [key in InputStatus]: (theme: BaseTheme) => string;
 } = {
-    default: (theme: BaseTheme) => theme.mapped.text.on.default,
-    error: (theme: BaseTheme) => theme.mapped.text.danger,
-    disabled: (theme: BaseTheme) => theme.mapped.text.disabled,
-}
+  default: (theme: BaseTheme) => theme.mapped.text.on.default,
+  error: (theme: BaseTheme) => theme.mapped.text.danger,
+  disabled: (theme: BaseTheme) => theme.mapped.text.disabled,
+};
 
 interface InputStylesProps {
   variant: InputVariants;
@@ -45,8 +44,9 @@ const useInputStyle = (styles: InputStylesProps) => {
       letterSpacing: textSizeMap[styles.variant](theme).letterSpacing,
       fontFamily: theme.fontFamily.primary.medium,
       color: textColorMap[styles.status](theme),
-      textAlignVertical: 'center', // Centraliza verticalmente
-
+      textAlignVertical: "center", // Centraliza verticalmente
+      includeFontPadding: true,
+      paddingVertical: 0, // 🔹 Evita padding extra em certos dispositivos
     },
     placeholder: {
       color: theme.mapped.text.disabled,

@@ -49,6 +49,7 @@ const defineConfig = ({ config }: ConfigContext): ExpoConfig => {
       },
       CLERK_PUBLISHABLE_KEY: process.env.CLERK_PUBLISHABLE_KEY,
       APPWRITE_COLLECTION_USERS_ID: process.env.APPWRITE_COLLECTION_USERS_ID,
+      APPWRITE_COLLECTION_TESTE_ID: process.env.APPWRITE_COLLECTION_TESTE_ID,
       APPWRITE_DATABASE_ID: process.env.APPWRITE_DATABASE_ID,
       APPWRITE_PROJECT_ID: process.env.APPWRITE_PROJECT_ID,
     },

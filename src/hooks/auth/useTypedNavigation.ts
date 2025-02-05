@@ -2,10 +2,6 @@ import { AllRoutes, APP_ROUTES } from "@/src/routes/routes";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Route } from "expo-router";
 
-
-
-
-
 /**
 
  * 4) Extraímos as chaves do tipo AllRoutes. ( "HOME" | "ABOUT" | ...)
@@ -25,8 +21,27 @@ type RouteParams<T extends RouteKeys> = AllRoutes[T]["params"];
  */
 function createUrl(path: string, params?: Record<string, string>): string {
   if (!params) return path;
-  const qs = new URLSearchParams(params).toString();
-  return qs ? `${path}?${qs}` : path;
+
+  let formattedPath = path;
+  const queryParams: Record<string, string> = {};
+
+  for (const [key, value] of Object.entries(params)) {
+    // Se a chave existir na rota como [key], substituímos
+    if (formattedPath.includes(`[${key}]`)) {
+      formattedPath = formattedPath.replace(
+        `[${key}]`,
+        encodeURIComponent(value)
+      );
+    } else {
+      // Se não existir na rota, adicionamos nos query params
+      queryParams[key] = value;
+    }
+  }
+
+  // Gerar query string apenas se houver parâmetros extras
+  const queryString = new URLSearchParams(queryParams).toString();
+
+  return queryString ? `${formattedPath}?${queryString}` : formattedPath;
 }
 
 /**

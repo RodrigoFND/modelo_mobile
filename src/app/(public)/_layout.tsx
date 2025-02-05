@@ -4,8 +4,8 @@ export default function PublicLayout() {
     const { isAuthenticated } = useAuthAppwrite();
 
     if (isAuthenticated) {
-        return <Redirect href="/(private)/config/appConfig" />;
+        return <Redirect href="/(private)" />;
     }
 
-  return <Stack />;
+  return <Stack screenOptions={{ headerShown: false }} />;
 }

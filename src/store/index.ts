@@ -1,8 +1,9 @@
-import { useAuthStore } from "./auth/useAuthStore";
+
+import { useTesteStore } from "./teste/useTeste.store";
 import { useUserStore } from "./user/useUserStore";
 
 export const Store = {
-    useAuthStore,
     useUserStore,
+    useTesteStore,
  
 }

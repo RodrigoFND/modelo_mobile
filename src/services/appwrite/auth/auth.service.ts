@@ -1,8 +1,8 @@
-import { User } from "@/src/models/services/auth/auth.models";
+import { User } from "@/src/models/services/auth.models";
 import ApiClient from "../service";
 
 
-export const AuthAPI = {
+export const AuthService = {
 
   async getCurrentSession(): Promise<User | null> {
     return await ApiClient.auth.getCurrentSession();
@@ -20,10 +20,15 @@ export const AuthAPI = {
     return res
   },
 
+  async logoutAllSessions(): Promise<void> {
+    return await ApiClient.auth.logoutAllSessions();
+  },
+
 
   async logout(): Promise<void> {
     return await ApiClient.auth.logoutUser()
   }
+
 
   
 };

@@ -34,6 +34,7 @@ import {
 } from "@expo-google-fonts/dm-sans";
 import AmbientVariables from "@/src/env";
 import * as WebBrowser from "expo-web-browser";
+import { useTypedNavigation } from "../hooks/auth/useTypedNavigation";
 
 onlineManager.setEventListener((setOnline) => {
   const subscription = Network.addNetworkStateListener((state) => {
@@ -67,9 +68,6 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("@/src/assets/fonts/SpaceMono-Regular.ttf"),
   });
-
-  console.log("clerkPublishableKey", AmbientVariables.clerkPublishableKey);
-  console.log("apiUrl", AmbientVariables.apiUrl);
 
   useEffect(() => {
     async function prepare() {
@@ -138,7 +136,9 @@ export default function RootLayout() {
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <ThemeProvider>
         <AuthProviderAppwrite>
-          <RootLayoutNav />
+          <QueryClientProvider client={queryClient}>
+            <RootLayoutNav />
+          </QueryClientProvider>
         </AuthProviderAppwrite>
       </ThemeProvider>
     </View>
@@ -148,7 +148,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const {isLoading,isAuthenticated } = useAuthAppwrite();
   const segments = useSegments();
-
+  const { navigate } = useTypedNavigation();
 
   useEffect(() => {
     if(isLoading){
@@ -156,10 +156,12 @@ function RootLayoutNav() {
     }
     const inAuthGroup = segments[0] === "(private)";
     const isPublicRoute = segments[0] === "(public)";
-    if(isAuthenticated && !inAuthGroup) 
-      router.replace("/(private)/config/appConfig");
-    else if(!isAuthenticated && !isPublicRoute)
-      router.replace("/(public)/signIn");
+    if(isAuthenticated && !inAuthGroup)  {
+      navigate({route:"PRIVATE_ROOT",replace:true});
+    }
+    else if(!isAuthenticated && !isPublicRoute)  {
+      navigate({route:"PUBLIC_SIGNIN",replace:true});
+    }
   }, [isLoading,isAuthenticated,segments]);
 
 

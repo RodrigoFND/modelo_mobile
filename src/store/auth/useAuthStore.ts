@@ -1,5 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { login, logout } from '@/services/authService'; // Mock de login/logout
+/* import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { getSessionTokens, saveSessionTokens, removeSessionTokens } from '@/src/utils/secureStore/sessionStore/sessionStore';
 import { getUser, saveUser, removeUser } from '@/src/utils/secureStore/userStore/userStore';
 
@@ -90,10 +90,10 @@ const useAuthLogout = () => {
   };
 };
 
-// Store organizado para acesso
 export const useAuthStore = {
   queryKey: authStoreQueryKey,
   useSession: useAuthSession,
   useLogin: useAuthLogin,
   useLogout: useAuthLogout,
 };
+ */

@@ -6,7 +6,7 @@ export default function Index() {
    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
     <Text style={{ fontSize: 20, fontWeight: "bold",color: "yellow" }}>Root Index</Text>
     <Button title="Go to Public" onPress={() => router.push("/(public)/signIn")} />
-    <Button title="Go to Private" onPress={() => router.push("/(private)/config/appConfig")} />
+    <Button title="Go to Private" onPress={() => router.push("/(private)")} />
    </View>
 
   );
