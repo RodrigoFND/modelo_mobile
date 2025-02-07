@@ -42,6 +42,7 @@ const useLabelStyles = (labelStyles: LabelStyles) => {
             color: asteriskColorMap[labelStyles.status](theme),
             fontSize: scaleSize(18),
         }
+
     })
 }
 

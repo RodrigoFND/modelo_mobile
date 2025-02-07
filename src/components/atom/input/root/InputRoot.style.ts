@@ -62,8 +62,6 @@ export const useInputRootStyles = (styles: InputRootStylesProps) => {
         inputContainer: {
             position: 'relative',
             flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
             backgroundColor: styles.status == 'disabled' ? theme.mapped.surface.disabled : theme.mapped.surface.default,
             borderColor: borderColorMap[styles.filledState][styles.status][styles.focusedState](theme),
             borderWidth: 1,
@@ -71,9 +69,6 @@ export const useInputRootStyles = (styles: InputRootStylesProps) => {
             paddingHorizontal: inputVariants[styles.variant].paddingHorizontal,
             paddingVertical: inputVariants[styles.variant].paddingVertical,
             minHeight: inputVariants[styles.variant].height,
-            gap: scaleSize(8),
-      
-
         }
       
     })
