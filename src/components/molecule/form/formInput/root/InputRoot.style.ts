@@ -1,23 +1,20 @@
 import { useTheme } from "@/src/providers/ThemeProvider";
 import { StyleSheet } from "react-native";
-import { InputVariants, InputStatus, InputFilledState, InputFocusedState } from "../Input.model";
+import { FormInputVariants, FormInputStatus, FormInputFilledState, FormInputFocusedState } from "../FormInput.model";
 import { BaseTheme } from "@/src/styles/theme.style";
 import { scaleSize } from "@/src/styles/mixing.style";
 
 
-
-const inputVariants : { [key in InputVariants]: {width: number, height: number, paddingHorizontal: number, paddingVertical: number} } = {
+const inputVariants : { [key in FormInputVariants]: {width: number, height: number, paddingHorizontal: number, paddingVertical: number} } = {
     md: {width: scaleSize(150), height: scaleSize(54), paddingHorizontal: scaleSize(16), paddingVertical: scaleSize(12)},
+
     lg: {width: scaleSize(150), height: scaleSize(64), paddingHorizontal: scaleSize(20), paddingVertical: scaleSize(16)}
 }
 
-
-
-const borderColorMap: { [key in InputFilledState]: { [key in InputStatus]: { [key in InputFocusedState]: (theme: BaseTheme) => string } } } = {
+const borderColorMap: { [key in FormInputFilledState]: { [key in FormInputStatus]: { [key in FormInputFocusedState]: (theme: BaseTheme) => string } } } = {
     filled: {
         default: {
             notFocused: (theme: BaseTheme) => theme.mapped.border.filled.default,
-
             focused: (theme: BaseTheme) => theme.mapped.border.filled.defaultFocused,
         },
 
@@ -46,17 +43,18 @@ const borderColorMap: { [key in InputFilledState]: { [key in InputStatus]: { [ke
     },
 }
 
+interface FormInputRootStylesProps {
+    variant: FormInputVariants,
+    status: FormInputStatus,
+    filledState: FormInputFilledState,
+    focusedState: FormInputFocusedState,
+    fullWidth: boolean
 
-interface InputRootStylesProps {
-    variant: InputVariants,
-    status: InputStatus,
-    filledState: InputFilledState,
-    focusedState: InputFocusedState,
+
 }
 
-export const useInputRootStyles = (styles: InputRootStylesProps) => {
+export const useFormInputRootStyles = (styles: FormInputRootStylesProps) => {
     const {theme} = useTheme();
-
 
     return StyleSheet.create({
         inputContainer: {
@@ -70,10 +68,9 @@ export const useInputRootStyles = (styles: InputRootStylesProps) => {
             borderRadius: theme.borderRadius.r_8,
             paddingHorizontal: inputVariants[styles.variant].paddingHorizontal,
             paddingVertical: inputVariants[styles.variant].paddingVertical,
-            minHeight: inputVariants[styles.variant].height,
+            minWidth: styles.fullWidth ? '100%' : inputVariants[styles.variant].width,
+            height: inputVariants[styles.variant].height,
             gap: scaleSize(8),
-      
-
         }
       
     })

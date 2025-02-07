@@ -14,11 +14,12 @@ import {
 import Button from "@/src/components/atom/button/Button";
 import { useRef } from "react";
 import Text from "@/src/components/atom/text/Text";
-import  Input from "@/src/components/atom/input/Input";
+
 import { AuthService } from "@/src/services/appwrite/auth/auth.service";
-import { useGoogleAuth } from "@/src/app2/t";
+
 import AppWriteClient from "@/backend/appwrite/config/appwrite.client";
 import { useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
+import FormInput from "@/src/components/molecule/form/formInput/FormInput";
 
 /* forios -  11195953346-mlog0out7hg9ior8pptb76ik5dscetph.apps.googleusercontent.com */
 /* forandroid - 11195953346-e82kjuiknd48cfb2mjj31ifksoctpgvq.apps.googleusercontent.com */
@@ -84,16 +85,17 @@ export default function SignIn() {
             control={control}
             name="emailOrUsername"
             render={({ field: { onChange, onBlur, value, disabled } }) => (
-              <Input.Root
+              <FormInput.Root
                 error={errors.emailOrUsername ? true : false}
                 errorMessage={errors.emailOrUsername?.message}
                 variant="md"
                 fullWidth={false}
                 label="Email or Username"
                 required={true}
+
                 editable={disabled || !isSubmitting}
               >
-                <Input.Email
+                <FormInput.Email
                   ref={refUserEmail}
                   onChangeText={onChange}
                   onBlur={onBlur}
@@ -105,7 +107,7 @@ export default function SignIn() {
                   onSubmitEditing={() => refPassword.current?.focus()}
                   submitBehavior={"newline"}
                 />
-              </Input.Root>
+              </FormInput.Root>
             )}
           />
 
@@ -113,7 +115,7 @@ export default function SignIn() {
             control={control}
             name="password"
             render={({ field: { onChange, onBlur, value, disabled } }) => (
-              <Input.Root
+              <FormInput.Root
                 error={errors.password ? true : false}
                 errorMessage={errors.password?.message}
                 variant="md"
@@ -122,7 +124,7 @@ export default function SignIn() {
                 required={true}
                 editable={disabled || !isSubmitting}
               >
-                <Input.Text
+                <FormInput.Text
                   ref={refPassword}
                   onChangeText={onChange}
                   onBlur={onBlur}
@@ -138,12 +140,12 @@ export default function SignIn() {
                   }}
                 >
                   {isPasswordHidden ? (
-                    <Input.Icon name="eye" family="Feather" />
+                    <FormInput.Icon name="eye" family="Feather" />
                   ) : (
-                    <Input.Icon name="eye-off" family="Feather" />
+                    <FormInput.Icon name="eye-off" family="Feather" />
                   )}
                 </TouchableOpacity>
-              </Input.Root>
+              </FormInput.Root>
             )}
           />
 

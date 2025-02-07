@@ -1,26 +1,48 @@
-import { View } from "react-native";
-import Input from "@/src/components/atom/input/Input";
+import { KeyboardAvoidingView, Keyboard, Platform, TouchableWithoutFeedback, View } from "react-native";
+
 import { useState } from "react";
-import Text from "@/src/components/atom/text/Text";
+import Input from "@/src/components/atom/input/Input";
+
 const TextInput = () => {
   const [text, setText] = useState("Teste");
   return (
-    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-      <Text variant="label_medium_16">Teste</Text>
-    <Input.Root variant="md" fullWidth>
-  
-      <Input.Text value={text} onChangeText={setText} />
-    </Input.Root>
-
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+   
+      <Input.Root variant="md">
+        <Input.Content value={text} onChangeText={setText} />
+      </Input.Root>
     </View>
   );
-
 };
 
 export default function InputsPage() {
+  const [text, setText] = useState("Teste");
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <TextInput />
+    <KeyboardAvoidingView
+    style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+  >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", gap: 10 }}>
+ 
+
+       <Input.Root  variant="lg">
+        <Input.Content placeholder="lg"  value={text} onChangeText={setText} />
+      </Input.Root>
+      <Input.Root  variant="md">
+        <Input.Content placeholder="md"  value={text} onChangeText={setText} />
+      </Input.Root>
+      <Input.Root  variant="md" error={true}>
+        <Input.Content placeholder="error"   value={text} onChangeText={setText} />
+      </Input.Root>
+      <Input.Root  variant="md" editable = {false} >
+        <Input.Content placeholder="disabled"   value={text} onChangeText={setText} />
+      </Input.Root>
     </View>
+    </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+
+
+
   );
 }
