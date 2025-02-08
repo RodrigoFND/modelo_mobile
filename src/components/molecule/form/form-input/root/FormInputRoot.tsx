@@ -1,15 +1,12 @@
-import Input from "@/src/components/atom/input/Input";
-import FormInputLabel from "../formInput/root/input-label/FormInputLabel";
+import Input from "@/src/components/atom/input";
 import { View } from "react-native";
-import {
-  InputStatus,
-  InputVariants,
-} from "@/src/components/atom/input/Input.model";
-import Label from "@/src/components/atom/label/Label";
+import { InputVariants } from "@/src/components/atom/input/Input.model";
+import FormInputLabel from "./FormInputLabel/FormInputLabel";
+import useFormInputRootStyles from "./style";
+import FormInputError from "./FormInputError/FormInputError";
 
 interface FormInputRootProps {
   variant?: InputVariants;
-  status?: InputStatus;
   children: React.ReactNode;
   editable?: boolean;
   errorMessage?: string;
@@ -28,23 +25,26 @@ const FormInputRoot: React.FC<FormInputRootProps> = ({
   required = false,
   ...props
 }) => {
+  const styles = useFormInputRootStyles();
   return (
-    <View style={{ flexDirection: "column", gap: 10 }}>
-      <Label
+    <View style={styles.rootContainer}>
+      <FormInputLabel
         labelExtraContent={labelExtraContent}
         required={required}
         variant={variant}
       >
         {labelText}
-      </Label>
+      </FormInputLabel>
       <Input.Root
         variant={variant}
         error={Boolean(errorMessage)}
         editable={editable}
         {...props}
       >
-        <View>{children}</View>
+        <View style={styles.inputContainer}>{children}</View>
       </Input.Root>
+
+      <FormInputError errorMessage={errorMessage} variant={variant} />
     </View>
   );
 };

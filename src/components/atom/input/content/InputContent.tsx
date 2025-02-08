@@ -68,7 +68,7 @@ function useInputRef<T extends Partial<TextInput>>(
   return { ref, handlers, editable, status, variant };
 }
 
-interface InputContentProps extends TextInputProps {
+export interface InputContentProps extends Omit<TextInputProps, "editable"> {
   children?: React.ReactNode;
 }
 
@@ -93,7 +93,6 @@ const InputContent = forwardRef<TextInput, InputContentProps>(
       value
     );
     const styles = useInputStyle({ variant, status });
-
     return (
       <TextInput
         ref={ref}
@@ -105,6 +104,7 @@ const InputContent = forwardRef<TextInput, InputContentProps>(
         numberOfLines={numberOfLines}
         onBlur={handlers.handleBlur}
         onChangeText={handlers.handleChangeText}
+        textContentType="oneTimeCode"
         {...props}
       />
     );

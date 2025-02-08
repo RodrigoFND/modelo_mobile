@@ -2,7 +2,7 @@ import { useTheme } from "@/src/providers/ThemeProvider";
 import { StyleSheet } from "react-native";
 import { InputStatus, InputVariants } from "../Input.model";
 import { BaseTheme } from "@/src/styles/theme.style";
-import { FormInputVariants } from "@/src/components/molecule/form/formInput/FormInput.model";
+import { FormInputVariants } from "@/src/components/molecule/form/form-input/FormInput.model";
 
 
 

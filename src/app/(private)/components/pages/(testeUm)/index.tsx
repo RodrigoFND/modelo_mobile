@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import  Input from "@/src/components/atom/input/Input";
+import  Input from "@/src/components/atom/input";
 import Button from "@/src/components/atom/button/Button";
 import { useTypedNavigation } from "@/src/hooks/auth/useTypedNavigation";
 

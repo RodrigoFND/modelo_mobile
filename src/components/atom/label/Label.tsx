@@ -2,7 +2,7 @@ import { TextProps } from "react-native";
 import Text from "../text/Text";
 import useLabelStyles, { LabelStatus, LabelVariants } from "./Label.style";
 
-interface LabelProps extends TextProps {
+export interface LabelProps extends TextProps {
     status?: LabelStatus;
     variant?: LabelVariants;
     labelExtraContent?: React.ReactNode;

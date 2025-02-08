@@ -1,28 +1,26 @@
-import { memo } from 'react';
-import { ViewStyle, TextStyle, StyleProp } from 'react-native';
-import * as Icons from '@expo/vector-icons';
+import { memo } from "react";
+import { TextStyle, StyleProp } from "react-native";
+import * as Icons from "@expo/vector-icons";
+import useIconStyles, { IconAction, IconFamily, IconVariant } from "./Icon.style";
 
-type IconFamily = 'Feather' | 'Material' | 'AntDesign' | 'FontAwesome' | 'Ionicons';
+type FeatherIcons = keyof (typeof Icons.Feather)["glyphMap"];
+type MaterialIcons = keyof (typeof Icons.MaterialIcons)["glyphMap"];
+type AntDesignIcons = keyof (typeof Icons.AntDesign)["glyphMap"];
+type FontAwesomeIcons = keyof (typeof Icons.FontAwesome)["glyphMap"];
+type IoniconsIcons = keyof (typeof Icons.Ionicons)["glyphMap"];
 
-type FeatherIcons = keyof typeof Icons.Feather['glyphMap'];
-type MaterialIcons = keyof typeof Icons.MaterialIcons['glyphMap'];
-type AntDesignIcons = keyof typeof Icons.AntDesign['glyphMap'];
-type FontAwesomeIcons = keyof typeof Icons.FontAwesome['glyphMap'];
-type IoniconsIcons = keyof typeof Icons.Ionicons['glyphMap'];
-
-type IconName = 
+type IconName =
   | FeatherIcons
   | MaterialIcons
   | AntDesignIcons
   | FontAwesomeIcons
   | IoniconsIcons;
-  
 
 export interface IconProps {
   name: IconName;
   family?: IconFamily;
-  size?: number;
-  color?: string;
+  variant?: IconVariant;
+  action?: IconAction;
   style?: StyleProp<TextStyle>;
 }
 
@@ -31,20 +29,30 @@ const iconMap = {
   Material: Icons.MaterialIcons,
   AntDesign: Icons.AntDesign,
   FontAwesome: Icons.FontAwesome,
-  Ionicons: Icons.Ionicons
+  Ionicons: Icons.Ionicons,
 };
 
-const Icon = memo(({ 
-  name, 
-  family = 'Feather', 
-  size = 24, 
-  color = '#000',
-  style
-}: IconProps) => {
-  const IconComponent = iconMap[family];
-  return <IconComponent name={name as any} size={size} color={color} style={style} />;
-});
+const Icon = memo(
+  ({
+    name,
+    family = "Feather",
+    variant = "md",
+    action = "default",
+    style,
+  }: IconProps) => {
+    const IconComponent = iconMap[family];
+    const iconStyles = useIconStyles({action, variant});
+    return (
+      <IconComponent
+        name={name as any}
+        size={iconStyles.icon.fontSize}
+        color={iconStyles.icon.color}
+        style={style}
+      />
+    );
+  }
+);
 
-Icon.displayName = 'Icon';
+Icon.displayName = "Icon";
 
 export default Icon;

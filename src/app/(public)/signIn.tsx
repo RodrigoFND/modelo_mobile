@@ -19,7 +19,7 @@ import { AuthService } from "@/src/services/appwrite/auth/auth.service";
 
 import AppWriteClient from "@/backend/appwrite/config/appwrite.client";
 import { useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
-import FormInput from "@/src/components/molecule/form/formInput/FormInput";
+import FormInput from "@/src/components/molecule/form/form-input";
 
 /* forios -  11195953346-mlog0out7hg9ior8pptb76ik5dscetph.apps.googleusercontent.com */
 /* forandroid - 11195953346-e82kjuiknd48cfb2mjj31ifksoctpgvq.apps.googleusercontent.com */
@@ -39,8 +39,7 @@ const schema = z.object({
 });
 
 export default function SignIn() {
-
-  const { isAuthenticated,login,logout,updateSession } = useAuthAppwrite();
+  const { isAuthenticated, login, logout, updateSession } = useAuthAppwrite();
   const {
     control,
     handleSubmit,
@@ -53,13 +52,12 @@ export default function SignIn() {
     },
   });
 
-
   const refUserEmail = useRef<TextInput>(null);
   const refPassword = useRef<TextInput>(null);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const onSubmit = async (data: formFields) => {
-    return await login(data.emailOrUsername, data.password)
+    return await login(data.emailOrUsername, data.password);
   };
 
   return (
@@ -79,34 +77,31 @@ export default function SignIn() {
           >
             SignIn
           </Text>
-       
 
           <Controller
             control={control}
             name="emailOrUsername"
             render={({ field: { onChange, onBlur, value, disabled } }) => (
               <FormInput.Root
-                error={errors.emailOrUsername ? true : false}
                 errorMessage={errors.emailOrUsername?.message}
                 variant="md"
-                fullWidth={false}
-                label="Email or Username"
+                labelText="Email or Username"
                 required={true}
-
                 editable={disabled || !isSubmitting}
               >
-                <FormInput.Email
+                <FormInput.Icon name="user" family="Feather" />
+                <FormInput.Content.Email
                   ref={refUserEmail}
                   onChangeText={onChange}
                   onBlur={onBlur}
                   value={value}
                   placeholder="Email or Username"
-                  secureTextEntry={false}
-                  autoComplete="email"
                   returnKeyType="next"
-                  onSubmitEditing={() => refPassword.current?.focus()}
-                  submitBehavior={"newline"}
+                  onSubmitEditing={() => {
+                    refPassword.current?.focus();
+                  }}
                 />
+                <FormInput.Icon name="user" family="Feather" />
               </FormInput.Root>
             )}
           />
@@ -116,22 +111,19 @@ export default function SignIn() {
             name="password"
             render={({ field: { onChange, onBlur, value, disabled } }) => (
               <FormInput.Root
-                error={errors.password ? true : false}
                 errorMessage={errors.password?.message}
                 variant="md"
-                fullWidth={false}
-                label="Password"
+                labelText="Password"
                 required={true}
                 editable={disabled || !isSubmitting}
               >
-                <FormInput.Text
+                <FormInput.Content.Text
                   ref={refPassword}
                   onChangeText={onChange}
                   onBlur={onBlur}
                   value={value}
-                  placeholder="Password"
                   secureTextEntry={isPasswordHidden}
-                  autoComplete="password"
+                  placeholder="Password"
                   returnKeyType="done"
                 />
                 <TouchableOpacity
@@ -157,7 +149,6 @@ export default function SignIn() {
           >
             <Button.Text>Submit</Button.Text>
           </Button.Root>
-   
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

@@ -1,20 +1,21 @@
-import React, { forwardRef, useState, useEffect } from "react";
-import { TextInput, TextInputProps } from "react-native";
-import { useFormInputRef } from "../useFormInputRef";
-import useFormInputStyle from "../FormInput.style";
+import React, { useState, useEffect } from "react";
+import { InputContentProps } from "@/src/components/atom/input/content/InputContent";
+import Input from "@/src/components/atom/input";
+import { TextInput } from "react-native";
 
 type FormInputNumberProps = Omit<
-  TextInputProps,
-  "value" | "onChangeText" | "required" | "editable"
+  InputContentProps,
+  "value" | "onChangeText" | "onBlur" | "keyboardType"
 > & {
   value?: number;
   onChangeNumber?: (numValue: number) => void;
+  onBlur?: (numValue: number) => void;
   allowDecimals?: boolean;
   maxDecimalPlaces?: number;
   maxLength?: number;
 };
 
-const FormInputNumber = forwardRef<Partial<TextInput>, FormInputNumberProps>(
+const FormInputNumber = React.forwardRef<TextInput, FormInputNumberProps>(
   (
     {
       value = 0,
@@ -28,23 +29,13 @@ const FormInputNumber = forwardRef<Partial<TextInput>, FormInputNumberProps>(
       style,
       ...props
     },
-    forwardedRef
+    ref
   ) => {
     const [internalText, setInternalText] = useState(String(value ?? ""));
 
     useEffect(() => {
       setInternalText(String(value ?? ""));
     }, [value]);
-
-    const { handlers, ref, editable, status, variant } = useFormInputRef(
-      forwardedRef,
-      onFocus,
-      onBlur,
-      onChangeNumber,
-      value 
-    );
-
-    const styles = useFormInputStyle({ variant, status });
 
     function removeInvalidChars(
       rawText: string,
@@ -103,29 +94,25 @@ const FormInputNumber = forwardRef<Partial<TextInput>, FormInputNumberProps>(
         numericValue = 0;
       }
       setInternalText(filtered || "0");
-      handlers.handleChangeText(numericValue);
+      onChangeNumber?.(numericValue);
     }
 
     const handleBlur = () => {
       if (internalText.endsWith(".")) {
         setInternalText(internalText.slice(0, -1));
       }
-      handlers.handleBlur(value);
+
+      onBlur?.(value);
     };
 
     return (
-      <TextInput
+      <Input.Content
         ref={ref}
-        editable={editable}
-        value={internalText} // Exibimos a string do nosso estado interno
-        style={[styles.input, style]}
-        placeholderTextColor={styles.placeholder.color}
-        onFocus={handlers.handleFocus}
+        value={internalText}
         onBlur={handleBlur}
+        onChangeText={handleChangeTextNumber}
         numberOfLines={numberOfLines}
         keyboardType={allowDecimals ? "decimal-pad" : "number-pad"}
-        onChangeText={handleChangeTextNumber}
-        returnKeyType="done"
         {...props}
       />
     );
