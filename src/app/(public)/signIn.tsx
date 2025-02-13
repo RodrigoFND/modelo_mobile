@@ -5,22 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   View,
   TextInput,
-  Platform,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
   TouchableOpacity,
 } from "react-native";
 import Button from "@/src/components/atom/button/Button";
 import { useRef } from "react";
 import Text from "@/src/components/atom/text/Text";
-
-import { AuthService } from "@/src/services/appwrite/auth/auth.service";
-
-import AppWriteClient from "@/backend/appwrite/config/appwrite.client";
 import { useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
 import FormInput from "@/src/components/molecule/form/form-input";
-
+import AuthRouteTemplate from "@/src/components/template/AuthRouteTemplate";
+import { useTypedNavigation } from "@/src/hooks/auth/useTypedNavigation";
 /* forios -  11195953346-mlog0out7hg9ior8pptb76ik5dscetph.apps.googleusercontent.com */
 /* forandroid - 11195953346-e82kjuiknd48cfb2mjj31ifksoctpgvq.apps.googleusercontent.com */
 
@@ -40,6 +33,7 @@ const schema = z.object({
 
 export default function SignIn() {
   const { isAuthenticated, login, logout, updateSession } = useAuthAppwrite();
+  const { navigate } = useTypedNavigation();
   const {
     control,
     handleSubmit,
@@ -61,23 +55,9 @@ export default function SignIn() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ gap: 20, padding: 20 }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: "black",
-              marginBottom: 20,
-            }}
-          >
-            SignIn
-          </Text>
-
+    <AuthRouteTemplate
+      content={
+        <>
           <Controller
             control={control}
             name="emailOrUsername"
@@ -89,7 +69,7 @@ export default function SignIn() {
                 required={true}
                 editable={disabled || !isSubmitting}
               >
-                <FormInput.Icon name="user" family="Feather" />
+               
                 <FormInput.Content.Email
                   ref={refUserEmail}
                   onChangeText={onChange}
@@ -101,10 +81,12 @@ export default function SignIn() {
                     refPassword.current?.focus();
                   }}
                 />
-                <FormInput.Icon name="user" family="Feather" />
+             
               </FormInput.Root>
             )}
           />
+
+          
 
           <Controller
             control={control}
@@ -147,10 +129,16 @@ export default function SignIn() {
             action="defaultInverted"
             loading={isSubmitting}
           >
-            <Button.Text>Submit</Button.Text>
+            <Button.Text>Sign In</Button.Text>
           </Button.Root>
+        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+          <Text >Don't have an account? </Text>
+          <TouchableOpacity onPress={() => navigate({ route: "PUBLIC_SIGNUP" })}>
+            <Text action="primary">Sign Up</Text>
+          </TouchableOpacity>
         </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+        </>
+      }
+    />
   );
 }

@@ -341,6 +341,78 @@ export const LightTheme: BaseTheme = {
 
 export const DarkTheme: BaseTheme = {
   ...Theme,
+  mapped: {
+    text: {
+      default: colors.black,
+      defaultInverted: colors.white,
+      neutral: colors.grey_400,
+      secondary: colors.black,
+      primary: colors.aqua_default,
+      primaryInverted: colors.black,
+      warning: colors.orange_700,
+      danger: colors.red_700,
+      disabled: colors.grey_700,
+      on: {
+        default: colors.white,
+        defaultInverted: colors.black,
+        primary: colors.white,
+        secondary: colors.black,
+        primaryInverted: colors.aqua_700,
+        warning: colors.black,
+        danger: colors.black,
+        neutral: colors.black,
+        disabled: colors.grey_300,
+      },
+      active: {
+        default: colors.aqua_700,
+      },
+    },
+    surface: {
+      page: {
+        default: colors.black,
+        inverted: colors.white,
+      },
+      neutral: colors.grey_700,
+      default: colors.black,
+      defaultInverted: colors.white,
+      primary: colors.aqua_default,
+      primaryInverted: colors.black,
+      secondary: colors.blue_600,
+      warning: colors.orange_700,
+      danger: colors.red_700,
+      disabled: colors.grey_800,
+      hover: {
+        default: colors.grey_800,
+        defaultInverted: colors.white,
+        primary: colors.aqua_700,
+        primaryInverted: colors.grey_800,
+        warning: colors.orange_700,
+        danger: colors.red_700,
+      },
+      pressed: {
+        default: colors.grey_800,
+        defaultInverted: colors.grey_800,
+        primary: colors.aqua_700,
+        primaryInverted: colors.grey_800,
+        warning: colors.orange_800,
+        danger: colors.red_800,
+      },
+    },
+    border: {
+      default: colors.grey_700,
+      defaultFocused: colors.grey_400,
+      error: colors.red_700,
+      errorFocused: colors.red_400,
+      disabled: colors.grey_800,
+      filled: {
+        default: colors.grey_700,
+        defaultFocused: colors.grey_400,
+        error: colors.red_700,
+        errorFocused: colors.red_400,
+        disabled: colors.grey_800,
+      },
+    },
+  },
 };
 
 

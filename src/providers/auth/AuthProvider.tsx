@@ -11,11 +11,14 @@ import {
   saveSessionTokens,
   removeSessionTokens,
 } from "@/src/utils/secureStore/sessionStore/sessionStore";
-import { saveUser, removeUser } from "@/src/utils/secureStore/userStore/userStore";
+import {
+  saveUser,
+  removeUser,
+} from "@/src/utils/secureStore/userStore/userStore";
 import { AUTH_EVENTS } from "@/src/utils/emitters/authEvents";
 import authEventEmitter from "@/src/utils/emitters/authEvents";
 import { useAuthNavigation } from "./useAuthNavigation";
-import uuid from 'react-native-uuid';
+import uuid from "react-native-uuid";
 import { useAuthDataManager } from "./useAuthDataManager";
 
 type AuthSessionData = {
@@ -72,11 +75,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-
   useEffect(() => {
-
     if (!state.isAuthInitialized) {
- 
       initializeAuth();
     }
   }, [state.isAuthInitialized]);
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   async function initializeAuth() {
     try {
       const session = await getSessionTokens();
-      if(session) {
+      if (session) {
         await signInWithToken();
       }
     } catch (error) {
@@ -94,15 +94,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthInitialized: true,
       }));
     }
-  };
-
-  function checkCanSignIn ():boolean {
-    return state.session == null;
   }
 
-  async function signIn(username: string, password: string) : Promise<void> {
+  function checkCanSignIn(): boolean {
+    return state.session == null;
+  }
+  
+
+  async function signIn(username: string, password: string): Promise<void> {
     try {
-      if(!checkCanSignIn()) throw new Error("Has a Session in progress");
+      if (!checkCanSignIn()) throw new Error("Has a Session in progress");
       const { accessToken, refreshToken, id } = await AuthService.login(
         username,
         password
@@ -115,27 +116,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         ...state,
         user: { username, id: 1 },
         isAuthenticated: true,
-       session,
+        session,
       });
     } catch (error) {
-      console.error("signIn", error);
+      /*    console.error("signIn", error); */
     }
-  };
+  }
 
   async function signInWithToken(): Promise<void> {
     try {
+      const username = "teste";
+      const userId = 3232;
 
-      const username = "teste"
-      const userId = 3232
-
-      
-    
-    
       const tokens = await getSessionTokens();
-      
-      if(!tokens) throw new Error("No tokens found");
-      const session = { id: uuid.v4(), accessToken: tokens.accessToken, refreshToken: tokens.refreshToken };
-   
+
+      if (!tokens) throw new Error("No tokens found");
+      const session = {
+        id: uuid.v4(),
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      };
+
       await saveSessionTokens(session);
       await saveUser({ username, id: userId });
 
@@ -150,7 +151,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-
   async function signOut(): Promise<void> {
     await AuthService.logout();
     await removeSessionTokens();
@@ -161,27 +161,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isAuthenticated: false,
       session: null,
     });
-  };
+  }
 
   async function handleSessionRenewed(): Promise<void> {
     const session = await getSessionTokens();
 
-    if(!session)  {
-      console.warn("handleSessionRenewed","Sem dados na sessão");
+    if (!session) {
+      /*       console.warn("handleSessionRenewed","Sem dados na sessão"); */
       signOut();
       return;
     }
-    console.log("Sessao atualizada com sucesso");
+    /*     console.log("Sessao atualizada com sucesso"); */
     setState({
       ...state,
       session: session,
     });
-  };
+  }
 
-   function handleSessionExpired(): void {
-    console.warn("handleSessionExpired","Sessão expirada. Deslogando usuário...");
-   signOut();
-  };
+  function handleSessionExpired(): void {
+    /*    console.warn("handleSessionExpired","Sessão expirada. Deslogando usuário..."); */
+    signOut();
+  }
 
   return (
     <AuthContext.Provider

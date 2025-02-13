@@ -4,9 +4,13 @@ import { canUserAccessPage } from "@/src/routes/routePermissions/routePermission
 import { useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
 
 const routeRoot = APP_ROUTES.PRIVATE_COMPONENTS_ROOT;
+
 const routeAtomsButtons = APP_ROUTES.PRIVATE_COMPONENTS_ATOMS_BUTTONS;
 const routeAtomsText = APP_ROUTES.PRIVATE_COMPONENTS_ATOMS_TEXTS;
 const routeAtomsInputs = APP_ROUTES.PRIVATE_COMPONENTS_ATOMS_INPUTS;
+
+const routeFormInputs = APP_ROUTES.PRIVATE_COMPONENTS_MOLECULES_FORM_INPUTS;
+
 const routeTesteUmList = APP_ROUTES.PRIVATE_COMPONENTS_PAGES_TESTEUM_LIST;
 const routeTesteUmID = APP_ROUTES.PRIVATE_COMPONENTS_PAGES_TESTEUM_ID;
 
@@ -20,7 +24,7 @@ export default function ComponentsLayout() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: true }}>
+    <Stack screenOptions={{ headerShown: false, animation: "fade" }}>
       <Stack.Screen
         redirect={!canAccessRouteRoot}
         name={routeRoot.name}
@@ -45,7 +49,11 @@ export default function ComponentsLayout() {
         name={routeTesteUmList.name}
         redirect={!canUserAccessPage(routeTesteUmList, user, permissions)}
         options={{ title: "TesteUm" }}
-
+      />
+      <Stack.Screen
+        name={routeFormInputs.name}
+        redirect={!canUserAccessPage(routeFormInputs, user, permissions)}
+        options={{ title: "Form Inputs" }}
       />
 
       <Stack.Screen

@@ -1,5 +1,5 @@
-import { usePathname, useRouter, useSegments } from "expo-router";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import PrivateRouteTemplate from "@/src/components/template/PrivateRouteTemplate";
+import Button from "@/src/components/atom/button/Button";
 
 
 /* const buttonVariants : { [key in ButtonVariants]: string } = {
@@ -27,45 +27,9 @@ const buttonActions : { [key in ButtonActions]: string } = {
 );
  */
 export default function ButtonsPage() {
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Exemplo de Botões</Text>
-
- {/*      <FlatList
-        data={buttonData}
-        keyExtractor={(item) => `${item.variant}-${item.action}`}
-        renderItem={({ item }) => (
-          <View style={styles.buttonWrapper}>
-            <Button.Root variant={item.variant as ButtonVariants} action={item.action as ButtonActions}>
-              {item.label}
-            </Button.Root>
-          </View>
-
-
-        )}
-        numColumns={1} // Pode ser ajustado se quiser organizar melhor
-        showsVerticalScrollIndicator={false}
-      /> */}
-    </View>
-  );
+  return <PrivateRouteTemplate viewStyle={{ justifyContent: "center", alignItems: "center" }}>
+    <Button.Root variant="md" action="primary">
+      <Button.Text>Button</Button.Text>
+    </Button.Root>
+  </PrivateRouteTemplate>;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f4f4f4",
-    padding: 20,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#6200ea",
-    marginBottom: 15,
-    textAlign: "center",
-  },
-  buttonWrapper: {
-    marginBottom: 10,
-    alignItems: "center",
-  },
-});

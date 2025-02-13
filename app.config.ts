@@ -12,15 +12,17 @@ const defineConfig = ({ config }: ConfigContext): ExpoConfig => {
     scheme: "myapp",
     userInterfaceStyle: "automatic",
     newArchEnabled: true,
+    backgroundColor: "#f0f0f0",
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.rodrigo.standard",
+      backgroundColor: "#f0f0f0",
     },
     android: {
       package: "com.rodrigo.standard",
       adaptiveIcon: {
         foregroundImage: "./src/assets/images/adaptive-icon.png",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#f0f0f0",
       },
     },
     web: {

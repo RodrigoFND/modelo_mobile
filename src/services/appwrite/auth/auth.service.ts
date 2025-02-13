@@ -9,7 +9,7 @@ export const AuthService = {
   },
 
 
-  async register(email: string, password: string, username: string): Promise<User> {
+  async register(email: string, password: string, username: string): Promise<void> {
     return await ApiClient.auth.registerUser(email, password, username);
   },
 

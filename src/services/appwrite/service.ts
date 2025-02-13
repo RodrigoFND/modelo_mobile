@@ -28,11 +28,11 @@ class ApiClient {
       console.log("handleRequest", callback);
       return await callback();
     } catch (error: any) {
-      console.error("Erro na API:", error);
-      console.log("error code", error);
+  /*     console.error("Erro na API:", error);*/
+      console.log("error code", error); 
 
       if (error?.code === 401) {
-        console.warn("Sessão expirada. Redirecionando para login...");
+    /*     console.warn("Sessão expirada. Redirecionando para login..."); */
         this.experiedSessionEvent.emit("sessionExpired");
         return Promise.reject({ message: "Usuário inválido ou sessão expirada", code: 401 });
       }

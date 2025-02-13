@@ -1,11 +1,10 @@
 import Text from "@/src/components/atom/text/Text";
-import { View } from "react-native";
+import PrivateRouteTemplate from "@/src/components/template/PrivateRouteTemplate";
 
 export default function TextsPage() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      
-      <Text>Text</Text>
-    </View>
+    <PrivateRouteTemplate viewStyle={{ justifyContent: "center", alignItems: "center" }}>
+        <Text variant="h1_small" weight="bold" action="primary">Text</Text>
+    </PrivateRouteTemplate>
   );
 }

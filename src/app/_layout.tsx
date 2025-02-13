@@ -4,7 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useState } from "react";
 import "react-native-reanimated";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { onlineManager } from "@tanstack/react-query";
 import * as Network from "expo-network";
 import { AppState, Platform } from "react-native";
@@ -16,7 +16,10 @@ import {
 } from "@tanstack/react-query";
 import { Entypo } from "@expo/vector-icons";
 import * as Font from "expo-font";
-import { AuthProviderAppwrite, useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
+import {
+  AuthProviderAppwrite,
+  useAuthAppwrite,
+} from "@/src/providers/authAppwrite/AuthAppwrite";
 import { ClerkProvider } from "@clerk/clerk-expo";
 import { tokenCache } from "@/src/utils/secureStore/oAuthStore/oAuthStore";
 import { Theme } from "@/src/styles/theme.style";
@@ -35,6 +38,8 @@ import {
 import AmbientVariables from "@/src/env";
 import * as WebBrowser from "expo-web-browser";
 import { useTypedNavigation } from "../hooks/auth/useTypedNavigation";
+import Indicator from "../components/atom/indicator/Indicator";
+import LoadingScreenTemplate from "../components/template/LoadingScreenTemplate";
 
 onlineManager.setEventListener((setOnline) => {
   const subscription = Network.addNetworkStateListener((state) => {
@@ -87,9 +92,9 @@ export default function RootLayout() {
         ]);
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        /*  await new Promise((resolve) => setTimeout(resolve, 2000)); */
       } catch (e) {
-        console.warn(e);
+/*         console.warn(e); */
       } finally {
         // Tell the application to render
         setAppIsReady(true);
@@ -146,31 +151,28 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const {isLoading,isAuthenticated } = useAuthAppwrite();
+  const { isLoading, isAuthenticated } = useAuthAppwrite();
   const segments = useSegments();
   const { navigate } = useTypedNavigation();
 
   useEffect(() => {
-    if(isLoading){
+    if (isLoading) {
       return;
     }
     const inAuthGroup = segments[0] === "(private)";
     const isPublicRoute = segments[0] === "(public)";
-    if(isAuthenticated && !inAuthGroup)  {
-      navigate({route:"PRIVATE_ROOT",replace:true});
+    if (isAuthenticated && !inAuthGroup) {
+      navigate({ route: "PRIVATE_ROOT", replace: true });
+    } else if (!isAuthenticated && !isPublicRoute) {
+      console.log(segments[0]);
+      navigate({ route: "PUBLIC_SIGNIN", replace: true });
     }
-    else if(!isAuthenticated && !isPublicRoute)  {
-      navigate({route:"PUBLIC_SIGNIN",replace:true});
-    }
-  }, [isLoading,isAuthenticated,segments]);
+  }, [isLoading, isAuthenticated, segments]);
 
-
-  if(isLoading){
-    return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontSize: 20, fontWeight: "bold",color:'red' }}>Loading...</Text>
-    </View>
+  if (isLoading) {
+    return <LoadingScreenTemplate />;
   }
 
   /* console.log(PUBLIC_CLERK_PUBLISHABLE_KEY); */
-  return <Slot />;  
+  return <Slot screenOptions={{ animation: "fade" }} />;
 }

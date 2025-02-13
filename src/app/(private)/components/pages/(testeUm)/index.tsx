@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import  Input from "@/src/components/atom/input";
+import FormInput from "@/src/components/molecule/form/form-input";
+
 import Button from "@/src/components/atom/button/Button";
 import { useTypedNavigation } from "@/src/hooks/auth/useTypedNavigation";
 
@@ -37,7 +38,8 @@ const Item = memo(({ item }: { item: Teste }) => {
       <View style={styles.itemContainer}>
         <View style={styles.itemInfo}>
           <Text style={styles.itemId}>ID: {item.$id}</Text>
-          <Text style={styles.itemNome}>{item.nome}</Text>
+          <Text style={styles.itemNome}>Nome: {item.nome}</Text>
+         
           <Text style={styles.itemValor}>Valor: {item.valor}</Text>
         </View>
         {/* Botão de deletar */}
@@ -74,12 +76,12 @@ export default function TesteUm() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.form}>
-        <Input.Root>
-          <Input.Text placeholder="Nome" value={nome} onChangeText={setNome} />
-        </Input.Root>
-        <Input.Root>
-          <Input.Number placeholder="Valor" value={valor} onChangeNumber={setValor} />
-        </Input.Root>
+        <FormInput.Root>
+          <FormInput.Content.Text placeholder="Nome" value={nome} onChangeText={setNome} />
+        </FormInput.Root>
+        <FormInput.Root>
+          <FormInput.Content.Number placeholder="Valor" value={valor} onChangeNumber={setValor} />
+        </FormInput.Root>
         <Button.Root onPress={() => createTeste({ valor, nome })}>
           <Button.Text>Criar</Button.Text>
         </Button.Root>

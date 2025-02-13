@@ -24,8 +24,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     if(theme === DarkTheme) {
       console.log("Dark Theme")
+      Appearance.setColorScheme("dark")
     } else {
       console.log("Light Theme")
+      Appearance.setColorScheme("light")
     }
   }, [theme]);
 

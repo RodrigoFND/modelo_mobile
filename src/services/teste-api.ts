@@ -12,13 +12,13 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 // Função para buscar usuários com delay
 export const getUsers = async () => {
   try {
-    console.log('Iniciando a requisição para obter usuários...');
+   /*  console.log('Iniciando a requisição para obter usuários...'); */
     await delay(2000); // Atraso artificial de 2 segundos
     const response = await api.get('/users'); // Endpoint para obter os usuários
-    console.log('Requisição concluída.');
+ /*    console.log('Requisição concluída.'); */
     return response.data; // Retorna os dados da resposta
   } catch (error) {
-    console.error('Erro ao buscar usuários:', error);
+/*     console.error('Erro ao buscar usuários:', error); */
     throw error; // Repassa o erro para ser tratado externamente
   }
 };

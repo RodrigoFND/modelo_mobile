@@ -52,7 +52,7 @@ class AuthService {
     email: string,
     password: string,
     username: string
-  ): Promise<User> {
+  ): Promise<void> {
     try {
       const user = await this.account.create(
         ID.unique(),
@@ -67,7 +67,6 @@ class AuthService {
         username,
         avatarUrl
       );
-      return await this.buildUser(user.$id);
     } catch (error: AppwriteException | any) {
       throw {
         code: error?.code || 500, // 🔹 Mantém o código HTTP original

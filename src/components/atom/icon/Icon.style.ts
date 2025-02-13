@@ -4,7 +4,7 @@ import { BaseTheme } from "@/src/styles/theme.style";
 import { StyleSheet } from "react-native";
 
 type IconAction = "default" | "defaultInverted" | "primary" | "secondary" | "disabled" | "danger";
-type IconVariant = "sm" | "md" | "lg";
+type IconVariant = "sm" | "md" | "lg" | "xxl";
 type IconFamily =
   | "Feather"
   | "Material"
@@ -16,6 +16,7 @@ const iconSizeMap: { [key in IconVariant]: number } = {
   sm: scaleSize(24),
   md: scaleSize(26),
   lg: scaleSize(28),
+  xxl: scaleSize(50),
 };
 
 const iconColorMap: { [key in IconAction]: (theme: BaseTheme) => string } = {

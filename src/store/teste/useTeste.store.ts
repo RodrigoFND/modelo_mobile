@@ -25,6 +25,8 @@ const useGetTestes = () => {
     queryFn: TesteService.getTestes,
     refetchOnWindowFocus:true, // apos o o tempo acabar(stale) reconecta no foco
     refetchOnReconnect:true, // apos o o tempo acabar(stale) reconecta no reconnect
+    staleTime: 1000 * 30 * 1, // tempo de cache
+    refetchInterval: 1000 * 30 * 1, // tempo de cache
 /*     staleTime: 1000 * 60 * 5, // tempo de cache */
   /*   refetchInterval: 1000 * 60 * 5, // atualiza os dados automaticemnente */
    /*  refetchIntervalInBackground: true, // atualiza os dados automaticemnente em background */
@@ -34,8 +36,6 @@ const useGetTestes = () => {
 
 const useCreateTeste = () => {
   const queryClient = useQueryClient();
-
-  console.log("createTeste Store");
 
   return useMutation({
     mutationFn: async ({ valor, nome }: { valor: number; nome: string }) =>  
@@ -52,7 +52,6 @@ const useCreateTeste = () => {
 
 
 const useGetByIdTeste = (documentId: string) => {
-  console.log("documentId", documentId);
   return useQuery({
     queryKey: [testeStoreQueryKey, documentId],
     queryFn: () => TesteService.getTesteById(documentId),

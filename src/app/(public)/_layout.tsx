@@ -7,5 +7,5 @@ export default function PublicLayout() {
         return <Redirect href="/(private)" />;
     }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return <Stack screenOptions={{ headerShown: false, animation: "fade" }} />;
 }

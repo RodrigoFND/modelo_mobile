@@ -20,6 +20,11 @@ type AuthAppwriteContextType = {
   permissions: PermissionsList[];
   isAuthenticated: boolean;
   login: (emailOrUsername: string, password: string) => Promise<void>;
+  register: (
+    email: string,
+    password: string,
+    username: string
+  ) => Promise<void>;
   logout: () => Promise<void>;
   logoutAllSessions: () => Promise<void>;
 
@@ -83,8 +88,20 @@ export const AuthProviderAppwrite: React.FC<{ children: React.ReactNode }> = ({
     try {
       return await AuthService.getCurrentSession();
     } catch (error) {
-      console.warn("Falha ao obter sessão do usuário:", error);
+      /*     console.warn("Falha ao obter sessão do usuário:", error); */
       return null;
+    }
+  }
+
+  async function register(
+    email: string,
+    password: string,
+    username: string
+  ): Promise<void> {
+    try {
+      return await AuthService.register(email, password, username);
+    } catch (error) {
+      throw new Error("Falha ao registrar usuário.");
     }
   }
 
@@ -96,7 +113,7 @@ export const AuthProviderAppwrite: React.FC<{ children: React.ReactNode }> = ({
       const user = await AuthService.login(emailOrUsername, password);
       autenticateUser(user);
     } catch (error) {
-      console.error("Erro ao fazer login:", error);
+      /*       console.error("Erro ao fazer login:", error); */
       throw new Error("Falha ao autenticar usuário.");
     }
   }
@@ -107,7 +124,7 @@ export const AuthProviderAppwrite: React.FC<{ children: React.ReactNode }> = ({
       setIsLoading(true);
       await AuthService.logout();
     } catch (error) {
-      console.error("Erro ao deslogar:", error);
+      /*   console.error("Erro ao deslogar:", error); */
     } finally {
       unAuthenticateUser();
       setIsLoading(false);
@@ -118,7 +135,7 @@ export const AuthProviderAppwrite: React.FC<{ children: React.ReactNode }> = ({
     try {
       await AuthService.logoutAllSessions();
     } catch (error) {
-      console.error("Erro ao deslogar todas as sessões:", error);
+      /*  console.error("Erro ao deslogar todas as sessões:", error); */
     } finally {
       unAuthenticateUser();
     }
@@ -138,6 +155,7 @@ export const AuthProviderAppwrite: React.FC<{ children: React.ReactNode }> = ({
         permissions,
         isAuthenticated,
         login,
+        register,
         logout,
         logoutAllSessions,
         updateSession,

@@ -130,7 +130,7 @@ apiClient.interceptors.response.use(
         processRequestQueue("", refreshError);
 
         if (refreshError instanceof SessionIdChangedError) {
-          console.warn("Erro de ID de sessão alterado:");
+       /*    console.warn("Erro de ID de sessão alterado:"); */
         } else {
           authEventEmitter.emit(AUTH_EVENTS.SESSION_EXPIRED);
         }

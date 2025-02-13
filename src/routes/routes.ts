@@ -17,12 +17,15 @@ type PrivateRoutes = {
   PRIVATE_COMPONENTS_ATOMS_BUTTONS: MyRoutes<undefined>;
   PRIVATE_COMPONENTS_ATOMS_TEXTS: MyRoutes<undefined>;
   PRIVATE_COMPONENTS_ATOMS_INPUTS: MyRoutes<undefined>;
+  PRIVATE_COMPONENTS_MOLECULES_FORM_INPUTS: MyRoutes<undefined>;
   PRIVATE_COMPONENTS_PAGES_TESTEUM_LIST: MyRoutes<undefined>;
-  PRIVATE_COMPONENTS_PAGES_TESTEUM_ID: MyRoutes<{ id: string,nome:string }>;
+  PRIVATE_COMPONENTS_PAGES_TESTEUM_ID: MyRoutes<{ id: string; nome: string }>;
+  PRIVATE_PROFILE: MyRoutes<undefined>;
 };
 
 type PublicRoutes = {
   PUBLIC_SIGNIN: MyRoutes<undefined>;
+  PUBLIC_SIGNUP: MyRoutes<undefined>;
 };
 
 export type AllRoutes = PrivateRoutes & PublicRoutes;
@@ -48,11 +51,15 @@ const PRIVATE_ROUTES: PrivateRoutes = {
     name: "atoms/texts",
     path: "/(private)/components/atoms/texts",
     permission: [],
-
   },
   PRIVATE_COMPONENTS_ATOMS_INPUTS: {
     name: "atoms/inputs",
     path: "/(private)/components/atoms/inputs",
+    permission: [],
+  },
+  PRIVATE_COMPONENTS_MOLECULES_FORM_INPUTS: {
+    name: "molecules/form-inputs",
+    path: "/(private)/components/molecules/form-inputs",
     permission: [],
   },
   PRIVATE_COMPONENTS_PAGES_TESTEUM_LIST: {
@@ -61,11 +68,16 @@ const PRIVATE_ROUTES: PrivateRoutes = {
     permission: [],
   },
 
-
   PRIVATE_COMPONENTS_PAGES_TESTEUM_ID: {
     name: "pages/(testeUm)/[id]",
     path: "/(private)/components/pages/(testeUm)/[id]",
-    params: { id: "",nome:"" },
+    params: { id: "", nome: "" },
+    permission: [],
+  },
+
+  PRIVATE_PROFILE: {
+    name: "profile/index",
+    path: "/(private)/profile",
     permission: [],
   },
 };
@@ -74,6 +86,11 @@ const PUBLIC_ROUTES: PublicRoutes = {
   PUBLIC_SIGNIN: {
     name: "signIn",
     path: "/(public)/signIn",
+    permission: ["comments:create"],
+  },
+  PUBLIC_SIGNUP: {
+    name: "signUp",
+    path: "/(public)/signUp",
     permission: ["comments:create"],
   },
 };

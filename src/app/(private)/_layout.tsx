@@ -8,9 +8,10 @@ import Text from "@/src/components/atom/text/Text";
 import { canUserAccessPage } from "@/src/routes/routePermissions/routePermission";
 import { useAuthAppwrite } from "@/src/providers/authAppwrite/AuthAppwrite";
 import NotFoundScreen from "@/src/components/organism/Error/privatePage/NotFound";
-
+import TabBar from "@/src/components/organism/tabBar/TabBar";
 
 const routeRoot = APP_ROUTES.PRIVATE_ROOT;
+const routeProfile = APP_ROUTES.PRIVATE_PROFILE;
 
 export default function PrivateLayout() {
   const { user, permissions, isAuthenticated } = useAuthAppwrite();
@@ -25,106 +26,40 @@ export default function PrivateLayout() {
   }
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarLabel: ({ focused, children }) => {
-          return (
-            <Text
-              variant="label_medium_16"
-              style={{
-                color: focused
-                  ? Theme.colors.primary.primary_default
-                  : Theme.colors.neutral.neutral_400,
-              }}
-            >
-              {children}
-            </Text>
-          );
+    <TabBar
+      screens={[
+        {
+          name: routeRoot.name,
+          redirect: !canAccessRouteRoot,
+          options: {
+            title: "Home",
+            headerShown: false
+          },
+          
         },
-      }}
-    >
-      <Tabs.Screen
-        name={"index"}
-        redirect={!canAccessRouteRoot}
-        options={{
-          title: "Home",
-          headerShown: false,
-          tabBarIcon: ({ focused }) => {
-            return (
-              <Icon
-                name="home"
-                style={{
-                  color: focused
-                    ? Theme.colors.primary.primary_default
-                    : Theme.colors.neutral.neutral_400,
-                }}
-              />
-            );
+        {
+          name: "components",
+          iconProps: {
+            name: "widgets",
+            family: "Material",
           },
-        }}
-      />
-      <Tabs.Screen
-        name={"components"}
-        options={{
-          title: "Components",
-          tabBarIcon: ({ focused }) => {
-            return (
-              <Icon
-                name="widgets"
-                family="Material"
-                style={{
-                  color: focused
-                    ? Theme.colors.primary.primary_default
-                    : Theme.colors.neutral.neutral_400,
-                }}
-              />
-            );
+          options: {
+            title: "Components",
+            headerShown: false
           },
-        }}
-      />
-      {/*        <Tabs.Screen
-        name={'components/atoms'}
-        options={{
-      
-        }}
-      />
- */}
-    </Tabs>
+        },
+        {
+          name: routeProfile.name,
+          iconProps: {
+            name: "settings",
+            family: "Material",
+          },
+          options: {
+            title: "Profile",
+            headerShown: false
+          },
+        },
+      ]}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f4f4f4",
-  },
-  loadingText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: Theme.colors.primary.primary_default,
-    marginTop: 10,
-  },
-  tabBar: {
-    backgroundColor: Theme.colors.neutral.neutral_100,
-    height: 60,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  tabLabel: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: Theme.colors.neutral.neutral_100,
-  },
-  tabIndicator: {
-    backgroundColor: Theme.colors.neutral.neutral_100,
-    height: 3,
-  },
-});
